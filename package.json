@@ -4,13 +4,14 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "lint": "eslint .",
-    "preview": "vite preview",
-    "server": "node --env-file=.env server/index.js",
-    "vercel-build": "npm ci && npm run build"
-  },
+  "dev": "vite",
+  "build": "vite build",
+  "lint": "eslint .",
+  "preview": "vite preview",
+  "server": "node --env-file=.env server/index.js",
+  "vercel-build": "vite build"
+}
+,
   "engines": {
     "node": ">=18.0.0"
   },
