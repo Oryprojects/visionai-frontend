@@ -9,7 +9,10 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "server": "node --env-file=.env server/index.js",
-    "vercel-build": "vite build"
+    "vercel-build": "npm install && npm run build"
+  },
+  "engines": {
+    "node": ">=16.0.0"
   },
   "dependencies": {
     "@getbrevo/brevo": "^3.0.1",
