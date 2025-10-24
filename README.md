@@ -17,6 +17,8 @@
 - Added framer-motion to separate vendor chunk
 - Added environment variable definitions
 
+demo
+
 ### 3. React Context & MotionConfig Issues
 - Added proper error boundary (`ErrorBoundary.tsx`)
 - Enhanced main.tsx with React loading checks
