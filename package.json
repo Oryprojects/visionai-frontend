@@ -9,7 +9,7 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "server": "node --env-file=.env server/index.js",
-    "vercel-build": "npm install && npm run build"
+    "vercel-build": "npm ci && npm run build"
   },
   "engines": {
     "node": ">=18.0.0"

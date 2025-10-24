@@ -9,9 +9,6 @@ public
 .env.test.local
 .env.production.local
 
-# Build artifacts (keep dist for static build)
-# dist
-
 # IDE files
 .vscode
 .idea
