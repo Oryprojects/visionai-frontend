@@ -86,12 +86,17 @@ if (!process.env.VERCEL) {
   };
 }
 
-// MongoDB connection
-const atlasUriFromUser = 'mongodb+srv://noreplyvisionai_db_user:qeUzyFS1z4PPJfPA@visionai.y3mkzyd.mongodb.net/visionai?retryWrites=true&w=majority&appName=visionai';
-const mongoUri = process.env.MONGODB_URI || atlasUriFromUser;
-mongoose.connect(mongoUri)
-.then(() => console.log('Connected to MongoDB'))
-.catch((error) => console.error('MongoDB connection error:', error));
+// MongoDB connection - require MONGODB_URI from environment for production.
+// Avoid hard-coded credentials in source.
+const mongoUri = process.env.MONGODB_URI;
+if (mongoUri) {
+  mongoose
+    .connect(mongoUri)
+    .then(() => console.log('Connected to MongoDB'))
+    .catch((error) => console.error('MongoDB connection error:', error));
+} else {
+  console.warn('MONGODB_URI is not set. Skipping MongoDB connection.');
+}
 
 // Routes
 app.use('/api/contact', contactRoutes);

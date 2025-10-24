@@ -36,7 +36,8 @@ const jobApplicationSchema = new mongoose.Schema({
   },
   resumePath: {
     type: String,
-    required: true,
+    // resumePath may be empty when using memory uploads (e.g., serverless environments)
+    required: false,
   },
   status: {
     type: String,

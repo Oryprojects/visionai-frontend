@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Brain, Mail, Phone, MapPin, Twitter, Linkedin, Github } from 'lucide-react';
+import { Mail, Phone, MapPin, Twitter, Linkedin, Github } from 'lucide-react';
 
 const Footer: React.FC = () => {
   return (
@@ -12,7 +12,7 @@ const Footer: React.FC = () => {
               <span className="text-xl font-bold">VisionAI</span> */}
               <Link to="/" className="flex items-center space-x-1 group" aria-label="VisionAI home">
                           {/* Logo only (no text) - medium size */}
-                          <img src="/vision ai logo.png" alt="VisionAI" className="h-28 md:h-28 w-auto" />
+                          <img src="/vision%20ai%20logo.png" alt="VisionAI" className="h-28 md:h-28 w-auto" />
                         </Link>
         
             <p className="text-gray-400 mb-6">
