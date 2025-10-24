@@ -3,7 +3,7 @@ import react from '@vitejs/plugin-react';
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: './',  // This ensures assets are loaded from the correct path
+  base: '/',  // Use absolute paths for Vercel
   plugins: [react()],
   optimizeDeps: {
     exclude: ['lucide-react'],
@@ -19,7 +19,7 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     emptyOutDir: true,
-    sourcemap: true,  // Helps with debugging production builds
+    sourcemap: false,  // Disable sourcemaps for production
     chunkSizeWarningLimit: 700,
     rollupOptions: {
       output: {
@@ -28,10 +28,14 @@ export default defineConfig({
             if (id.includes('react')) return 'vendor_react';
             if (id.includes('react-router')) return 'vendor_router';
             if (id.includes('lucide-react')) return 'vendor_icons';
+            if (id.includes('framer-motion')) return 'vendor_motion';
             return 'vendor_misc';
           }
         },
       },
     },
+  },
+  define: {
+    'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'production'),
   },
 });
