@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Brain, Menu, X, ChevronDown } from 'lucide-react';
+import { Menu, X, ChevronDown } from 'lucide-react';
 
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -14,13 +14,16 @@ const Header: React.FC = () => {
     { path: '/about', label: 'About' },
     { path: '/careers', label: 'Careers' },
     { path: '/contact', label: 'Contact' },
-    { path: '/blog', label: 'Blog' },
+    // { path: '/blog', label: 'Blog' },
   ];
 
   const servicesItems = [
-    { path: '/services/bot-vision', label: 'BOT Vision' },
-    { path: '/services/it-staffing', label: 'IT Staffing' },
-    { path: '/services/full-cycle-development', label: 'Full Cycle Development' },
+    { path: '/services/end-to-end-solution-implementation', label: 'End-to-End Solution Implementation' },
+    { path: '/services/ai-powered-business-intelligence', label: 'AI-Powered Business Intelligence' },
+    { path: '/services/agentic-ai-systems', label: 'Agentic AI Systems' },
+    { path: '/services/data-driven-analytics', label: 'Data-Driven Analytics' },
+    { path: '/services/bot-setup', label: 'BOT Setup (Build-Operate-Transfer)' },
+    { path: '/services/legacy-to-future-transformation', label: 'Legacy to Future Transformation' },
   ];
 
   const isActive = (path: string) => location.pathname === path;
@@ -41,14 +44,12 @@ const Header: React.FC = () => {
     <header className="sticky top-0 z-50 bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm border-b border-gray-200 dark:border-gray-700">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          <Link to="/" className="flex items-center space-x-2 group">
-            <div className="pulse-3d">
-              <Brain className="h-8 w-8 text-blue-600 dark:text-blue-400" />
-            </div>
-            <span className="text-xl font-bold text-gray-900 dark:text-white group-hover:neon-blue transition-all duration-300">VisionAI</span>
+          <Link to="/" className="flex items-center space-x-3 group" aria-label="VisionAI home">
+            {/* Logo only (no text) - medium size */}
+            <img src="/vision ai logo.png" alt="VisionAI" className="h-20 md:h-32 w-auto" />
           </Link>
 
-          <nav className="hidden md:flex space-x-8">
+          <nav className="hidden md:flex space-x-8" role="navigation" aria-label="Main navigation">
             {navItems.slice(0, 2).map((item) => (
               <Link
                 key={item.path}
@@ -69,6 +70,8 @@ const Header: React.FC = () => {
                 onMouseEnter={() => setIsServicesDropdownOpen(true)}
                 onMouseLeave={() => setIsServicesDropdownOpen(false)}
                 onClick={() => { window.dispatchEvent(new Event('force-route-transition')); navigate('/services'); }}
+                aria-haspopup="true"
+                aria-expanded={isServicesDropdownOpen}
                 className={`flex items-center space-x-1 text-sm font-medium transition-all duration-300 ${
                   isServicesActive()
                     ? 'text-blue-600 dark:text-blue-400'
@@ -136,6 +139,9 @@ const Header: React.FC = () => {
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               className="md:hidden p-2 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all duration-300"
+              aria-controls="mobile-menu"
+              aria-expanded={isMenuOpen}
+              aria-label="Toggle menu"
             >
               {isMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </button>
@@ -143,7 +149,7 @@ const Header: React.FC = () => {
         </div>
 
         {isMenuOpen && (
-          <div className="md:hidden py-4 border-t border-gray-200 dark:border-gray-700">
+          <div id="mobile-menu" role="dialog" aria-modal="false" className="md:hidden py-4 border-t border-gray-200 dark:border-gray-700">
             <nav className="flex flex-col space-y-2">
               {navItems.slice(0, 2).map((item) => (
                 <Link

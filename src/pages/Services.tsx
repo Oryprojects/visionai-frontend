@@ -1,53 +1,104 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Brain, TrendingUp, Bot } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { Brain, TrendingUp, Zap } from 'lucide-react';
 
 const Services: React.FC = () => {
+  const navigate = useNavigate();
+
+  const handleNavigate = (path: string) => {
+    window.dispatchEvent(new Event('force-route-transition'));
+    setTimeout(() => navigate(path), 100); // Small delay for transition to start
+  };
   const services = [
     {
-      icon: Bot,
-      title: 'BOT Vision',
-      description: 'Dedicated, long-term collaboration with top-tier bilingual engineers focused on your vision.',
-      slug: 'bot-vision',
+      icon: Brain,
+      title: 'End-to-End Solution Implementation',
+      description: 'Comprehensive delivery from strategy to execution, ensuring seamless integration across systems, processes, and teams.',
+      slug: 'end-to-end-solution-implementation',
       features: [
-        'Long-term dedicated engineering teams',
-        'Bilingual technical expertise',
-        'Strategic vision alignment',
-        'Continuous innovation and improvement',
-        'Deep domain knowledge and experience',
-        'Seamless communication and collaboration',
+        'Strategy-to-execution delivery',
+        'Seamless system/process/team integration',
+        'Cross-functional execution',
+        'Change management support',
+        'Continuous improvement',
+        'Risk mitigation throughout lifecycle',
       ],
       color: 'blue',
     },
     {
       icon: TrendingUp,
-      title: 'IT Staffing',
-      description: 'Flexible, short-term contracts providing agile support for your project timelines.',
-      slug: 'it-staffing',
+      title: 'AI-Powered Business Intelligence',
+      description: 'Transform raw data into actionable insights using advanced analytics, predictive modeling, and intelligent dashboards.',
+      slug: 'ai-powered-business-intelligence',
       features: [
-        'Flexible contract durations',
-        'Agile project support',
-        'Specialized technical skills',
-        'Quick team scaling',
-        'Cost-effective solutions',
-        'Project-specific expertise',
+        'Advanced analytics & dashboards',
+        'Predictive modeling',
+        'Data visualization',
+        'Automated reporting',
+        'Real-time insights',
+        'KPI tracking',
       ],
       color: 'purple',
     },
     {
-      icon: Brain,
-      title: 'Full Cycle Development',
-      description: 'Custom-fit teams for AI development, product architecture, and more — built for high-impact results.',
-      slug: 'full-cycle-development',
+      icon: Zap,
+      title: 'Agentic AI Systems',
+      description: 'Deploy autonomous AI agents that plan, decide, and execute tasks with minimal human intervention—driving efficiency and innovation.',
+      slug: 'agentic-ai-systems',
       features: [
-        'AI development expertise',
-        'Product architecture design',
-        'Custom team composition',
-        'End-to-end project delivery',
-        'High-impact results focus',
-        'Scalable team solutions',
+        'Autonomous AI agents',
+        'Task planning & execution',
+        'Minimal human intervention',
+        'Continuous learning',
+        'Workflow automation',
+        'Innovation acceleration',
       ],
       color: 'green',
+    },
+    {
+      icon: TrendingUp,
+      title: 'Data-Driven Analytics',
+      description: 'Leverage structured and unstructured data to uncover trends, optimize operations, and support informed decision-making.',
+      slug: 'data-driven-analytics',
+      features: [
+        'Structured/unstructured data analysis',
+        'Trend discovery',
+        'Operational optimization',
+        'Decision support',
+        'Custom analytics solutions',
+        'Data pipeline design',
+      ],
+      color: 'indigo',
+    },
+    {
+      icon: Brain,
+      title: 'BOT Setup (Build-Operate-Transfer)',
+      description: 'Establish offshore delivery centers with a clear path to ownership, enabling scalability, cost efficiency, and long-term control.',
+      slug: 'bot-setup',
+      features: [
+        'Offshore delivery center setup',
+        'Build-operate-transfer model',
+        'Scalability & cost efficiency',
+        'Knowledge transfer',
+        'Ownership transition',
+        'Long-term control',
+      ],
+      color: 'teal',
+    },
+    {
+      icon: Zap,
+      title: 'Legacy to Future Transformation',
+      description: 'Modernize outdated systems and processes by migrating to cloud-native, AI-enabled architectures that future-proof your business.',
+      slug: 'legacy-to-future-transformation',
+      features: [
+        'Legacy system modernization',
+        'Cloud-native migration',
+        'AI-enabled architectures',
+        'Process reengineering',
+        'Future-proofing',
+        'Risk-managed transformation',
+      ],
+      color: 'cyan',
     },
   ];
 
@@ -65,74 +116,68 @@ const Services: React.FC = () => {
     return colors[color as keyof typeof colors] || colors.blue;
   };
 
+  // Hero video rotation state (hoisted to top-level to satisfy hooks rules)
+  const heroVideos = ['/service.mov'].filter(Boolean);
+  const [current, setCurrent] = useState(0);
+  const sectionRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    if (heroVideos.length <= 1) return;
+    const id = setInterval(() => {
+      setCurrent((prev) => (prev + 1) % heroVideos.length);
+    }, 6000);
+    return () => clearInterval(id);
+  }, [heroVideos.length]);
+
   return (
     <div>
       {/* Hero Section - Fullscreen background video with clean overlay */}
       <section className="relative min-h-screen overflow-hidden">
-        {(() => {
-          const heroVideos = ['/service.mov'].filter(Boolean);
-          const [current, setCurrent] = useState(0);
-          // ...existing code...
-          const sectionRef = useRef<HTMLDivElement | null>(null);
+        <div ref={sectionRef} className="absolute inset-0">
+          {heroVideos.map((src, idx) => (
+            <video
+              key={`${src}-${idx}`}
+              src={src}
+              className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${idx === current ? 'opacity-100' : 'opacity-0'}`}
+              autoPlay
+              muted
+              loop
+              playsInline
+            />
+          ))}
 
-          useEffect(() => {
-            if (heroVideos.length <= 1) return; // no rotation if single video
-            const id = setInterval(() => {
-              setCurrent((prev) => (prev + 1) % heroVideos.length);
-            }, 6000);
-            return () => clearInterval(id);
-          }, [heroVideos.length]);
+          {/* Subtle readability overlay only */}
+          <div className="absolute inset-0 pointer-events-none">
+            <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/50 to-black/80"></div>
+            <div className="absolute -inset-x-10 -inset-y-10 bg-[radial-gradient(ellipse_at_center,rgba(99,102,241,0.25),transparent_60%)]"></div>
+          </div>
 
-          // Mouse move handler removed (unused)
-
-          return (
-            <div ref={sectionRef} className="absolute inset-0">
-              {heroVideos.map((src, idx) => (
-                <video
-                  key={`${src}-${idx}`}
-                  src={src}
-                  className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${idx === current ? 'opacity-100' : 'opacity-0'}`}
-                  autoPlay
-                  muted
-                  loop
-                  playsInline
-                />
-              ))}
-
-              {/* Subtle readability overlay only */}
-              <div className="absolute inset-0 pointer-events-none">
-                <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/50 to-black/80"></div>
-                <div className="absolute -inset-x-10 -inset-y-10 bg-[radial-gradient(ellipse_at_center,rgba(99,102,241,0.25),transparent_60%)]"></div>
+          {/* Centered content overlay */}
+          <div className="absolute inset-0 flex items-center justify-center text-center px-4">
+            <div className="max-w-3xl blog-hero-text slide-in-once slide-delay-200">
+              <h1 className="text-4xl md:text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-indigo-300 via-blue-300 to-cyan-300 mb-4 heading-zoom">
+                Our Services
+              </h1>
+              <p className="text-lg md:text-2xl text-blue-100 leading-relaxed sub-wipe">
+                Comprehensive AI solutions designed to transform your operations, drive growth,
+                and unlock new opportunities in the digital age.
+              </p>
+              <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
+                <button onClick={() => handleNavigate('/contact')} className="inline-flex items-center justify-center px-6 py-3 bg-white text-blue-600 rounded-lg hover:bg-gray-100 transition-colors">Get a Consultation</button>
+                <button onClick={() => handleNavigate('/about')} className="inline-flex items-center justify-center px-6 py-3 glass text-white rounded-lg hover:bg-white/20 transition-colors">Learn About Us</button>
               </div>
-
-              {/* Centered content overlay */}
-              <div className="absolute inset-0 flex items-center justify-center text-center px-4">
-                <div className="max-w-3xl blog-hero-text slide-in-once slide-delay-200">
-                  <h1 className="text-4xl md:text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-indigo-300 via-blue-300 to-cyan-300 mb-4 heading-zoom">
-                    Our Services
-                  </h1>
-                  <p className="text-lg md:text-2xl text-blue-100 leading-relaxed sub-wipe">
-                    Comprehensive AI solutions designed to transform your operations, drive growth,
-                    and unlock new opportunities in the digital age.
-                  </p>
-                  <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
-                    <a href="/contact" className="inline-flex items-center px-6 py-3 bg-white text-blue-600 rounded-lg hover:bg-gray-100 transition-colors">Get a Consultation</a>
-                    <a href="/about" className="inline-flex items-center px-6 py-3 glass text-white rounded-lg hover:bg-white/20 transition-colors">Learn About Us</a>
-                  </div>
-                </div>
-              </div>
-
-              {/* Dots */}
-              {heroVideos.length > 1 && (
-                <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2">
-                  {heroVideos.map((_, idx) => (
-                    <span key={idx} className={`h-2 w-2 rounded-full ${idx === current ? 'bg-white' : 'bg-white/50'}`} />
-                  ))}
-                </div>
-              )}
             </div>
-          );
-        })()}
+          </div>
+
+          {/* Dots */}
+          {heroVideos.length > 1 && (
+            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2">
+              {heroVideos.map((_, idx) => (
+                <span key={idx} className={`h-2 w-2 rounded-full ${idx === current ? 'bg-white' : 'bg-white/50'}`} />
+              ))}
+            </div>
+          )}
+        </div>
       </section>
 
       {/* Services Grid */}

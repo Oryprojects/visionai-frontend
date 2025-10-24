@@ -1,81 +1,36 @@
 import express from 'express';
 import multer from 'multer';
-import path from 'path';
-import { fileURLToPath } from 'url';
-import JobApplication from '../models/JobApplication.js';
 import { sendJobApplicationEmail } from '../utils/emailService.js';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 const router = express.Router();
 
-// Configure multer for file uploads
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    const dest = path.resolve(__dirname, '..', 'uploads', 'resumes');
-    cb(null, dest);
-  },
-  filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    cb(null, 'resume-' + uniqueSuffix + path.extname(file.originalname));
-  }
-});
-
-const upload = multer({ 
-  storage: storage,
-  limits: { fileSize: 10 * 1024 * 1024 }, // 10MB limit
-  fileFilter: (req, file, cb) => {
-    const allowedTypes = /pdf|doc|docx/;
-    const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
-    const mimetype = allowedTypes.test(file.mimetype);
-    
-    if (mimetype && extname) {
-      return cb(null, true);
-    } else {
-      cb(new Error('Only PDF, DOC, and DOCX files are allowed'));
-    }
-  }
-});
+// Use memory storage for Vercel compatibility
+const upload = multer({ storage: multer.memoryStorage() });
 
 // Submit job application
 router.post('/', upload.single('resume'), async (req, res) => {
   try {
     const { name, email, phone, position, message } = req.body;
 
-    // Validate required fields
     if (!name || !email || !position || !req.file) {
-      return res.status(400).json({ 
-        message: 'Name, email, position, and resume are required' 
-      });
+      return res.status(400).json({ message: 'Name, email, position, and resume are required' });
     }
 
-    // Create new job application
     const jobApplication = new JobApplication({
-      name,
-      email,
-      phone,
-      position,
-      message,
-      resumeFilename: req.file.filename,
-      resumePath: req.file.path,
+      name, email, phone, position, message,
+      resumeFilename: req.file.originalname,
     });
-
     await jobApplication.save();
 
-    // Send email notification
+    // Send email notification using Brevo
     try {
       await sendJobApplicationEmail({
-        name,
-        email,
-        phone,
-        position,
-        message,
-        resumeFilename: req.file.filename,
+        name, email, phone, position, message,
+        resume: req.file, // Pass the entire file object
       });
+      console.log('Career application emails sent successfully via Brevo');
     } catch (emailError) {
-      console.error('Email sending failed:', emailError);
-      // Don't fail the request if email fails
+      console.error('Brevo email sending failed:', emailError);
     }
 
     res.status(201).json({ 
@@ -85,9 +40,7 @@ router.post('/', upload.single('resume'), async (req, res) => {
 
   } catch (error) {
     console.error('Job application submission error:', error);
-    res.status(500).json({ 
-      message: 'Error submitting job application' 
-    });
+    res.status(500).json({ message: 'Error submitting job application' });
   }
 });
 

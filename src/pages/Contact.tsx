@@ -84,48 +84,37 @@ const Contact: React.FC = () => {
               
               <div className="space-y-6">
                 <div className="flex items-center">
-                  <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center mr-4">
-                    <Mail className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+                  <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center mr-4">
+                    <MapPin className="h-6 w-6 text-purple-600 dark:text-purple-400" />
                   </div>
                   <div>
-                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Email</h3>
-                    <p className="text-gray-600 dark:text-gray-300">hello@visionai.com</p>
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Vision AI Location</h3>
+                    <p className="text-gray-600 dark:text-gray-300">
+                      305-0861, Ibaraki, Tsukuba, Yatabe 1077-58
+                    </p>
                   </div>
                 </div>
-                
                 <div className="flex items-center">
                   <div className="w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center mr-4">
                     <Phone className="h-6 w-6 text-green-600 dark:text-green-400" />
                   </div>
                   <div>
-                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Phone</h3>
-                    <p className="text-gray-600 dark:text-gray-300">+1 (555) 123-4567</p>
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Tel</h3>
+                    <p className="text-gray-600 dark:text-gray-300">+81-50-8894-4567</p>
                   </div>
                 </div>
-                
                 <div className="flex items-center">
-                  <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center mr-4">
-                    <MapPin className="h-6 w-6 text-purple-600 dark:text-purple-400" />
+                  <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center mr-4">
+                    <Mail className="h-6 w-6 text-blue-600 dark:text-blue-400" />
                   </div>
                   <div>
-                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Office</h3>
-                    <p className="text-gray-600 dark:text-gray-300">
-                      123 Innovation Drive<br />
-                      San Francisco, CA 94103
-                    </p>
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Email</h3>
+                    <p className="text-gray-600 dark:text-gray-300">sales@visionai.jp</p>
                   </div>
                 </div>
               </div>
               
-              <div className="mt-8 p-6 bg-gray-50 dark:bg-gray-800 rounded-xl">
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-                  Response Time
-                </h3>
-                <p className="text-gray-600 dark:text-gray-300">
-                  We typically respond to all inquiries within 24 hours during business days. 
-                  For urgent matters, please call us directly.
-                </p>
-              </div>
+
             </div>
             
             {/* Contact Form */}
@@ -245,9 +234,8 @@ const Contact: React.FC = () => {
                 <div className="flex items-start">
                   <MapPin className="h-5 w-5 mr-3 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-1" />
                   <div>
-                    <div className="font-semibold">OryFolks Headquarters</div>
-                    <div>702, DSR Fortune Prime, 22, 9th Main, Rd Number 36, Madhapur</div>
-                    <div>Hyderabad, Telangana 500081, India</div>
+                    <div className="font-semibold">Vision AI Location</div>
+                    <div>305-0861, Ibaraki, Tsukuba, Yatabe 1077-58</div>
                   </div>
                 </div>
                 <div>
@@ -256,18 +244,18 @@ const Contact: React.FC = () => {
                 </div>
               </div>
             </div>
-            <div className="w-full h-[380px] rounded-xl overflow-hidden shadow-lg border border-gray-200 dark:border-gray-700">
-              <iframe
-                title="OryFolks Location"
-                width="100%"
-                height="100%"
-                style={{ border: 0 }}
-                loading="lazy"
-                allowFullScreen
-                referrerPolicy="no-referrer-when-downgrade"
-                src="https://www.google.com/maps?q=OryFolks%20Hyderabad&output=embed"
-              />
-            </div>
+                <div className="w-full h-[380px] rounded-xl overflow-hidden shadow-lg border border-gray-200 dark:border-gray-700">
+                  <iframe
+                    title="Vision AI Japan Location"
+                    width="100%"
+                    height="100%"
+                    style={{ border: 0 }}
+                    loading="lazy"
+                    allowFullScreen
+                    referrerPolicy="no-referrer-when-downgrade"
+                    src="https://www.google.com/maps?q=305-0861%2C%20Ibaraki%2C%20Tsukuba%2C%20Yatabe%201077-58%2C%20Japan&output=embed"
+                  />
+                </div>
           </div>
         </div>
       </section>

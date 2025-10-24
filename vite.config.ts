@@ -15,4 +15,19 @@ export default defineConfig({
       },
     },
   },
+  build: {
+    chunkSizeWarningLimit: 700,
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes('node_modules')) {
+            if (id.includes('react')) return 'vendor_react';
+            if (id.includes('react-router')) return 'vendor_router';
+            if (id.includes('lucide-react')) return 'vendor_icons';
+            return 'vendor_misc';
+          }
+        },
+      },
+    },
+  },
 });

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Calendar, User, ArrowRight, Clock } from 'lucide-react';
 
 const Blog: React.FC = () => {
@@ -69,8 +69,6 @@ const Blog: React.FC = () => {
 
   const heroVideos = ['/blog.mov'];
   const [current, setCurrent] = useState(0);
-  const [cursor, setCursor] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
-  const sectionRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
     const id = setInterval(() => {
@@ -79,16 +77,12 @@ const Blog: React.FC = () => {
     return () => clearInterval(id);
   }, [heroVideos.length]);
 
-  const handleMouseMove = (e: React.MouseEvent<HTMLElement>) => {
-    const rect = sectionRef.current?.getBoundingClientRect();
-    if (!rect) return;
-    setCursor({ x: e.clientX - rect.left, y: e.clientY - rect.top });
-  };
+  // mouse cursor tracking removed (unused)
 
   return (
     <div>
       {/* Hero Section - Fullscreen background video with clean overlay */}
-      <section ref={sectionRef} className="relative min-h-screen overflow-hidden" onMouseMove={handleMouseMove}>
+  <section className="relative min-h-screen overflow-hidden">
         <div className="absolute inset-0">
           {heroVideos.map((src, idx) => (
             <video

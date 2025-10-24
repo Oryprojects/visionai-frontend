@@ -1,14 +1,22 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Users, Target, Award, TrendingUp } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 const About: React.FC = () => {
-  const milestones = [
-    { year: '2020', title: 'Company Founded', description: 'VisionAI was established with a mission to democratize AI for businesses.' },
-    { year: '2021', title: 'First 100 Clients', description: 'Reached our first major milestone serving 100+ businesses across various industries.' },
-    { year: '2022', title: 'Series A Funding', description: 'Secured $10M in Series A funding to expand our AI capabilities and team.' },
-    { year: '2023', title: 'Global Expansion', description: 'Opened offices in London, Singapore, and Toronto to serve clients worldwide.' },
-    { year: '2024', title: 'AI Innovation Award', description: 'Recognized as the leading AI consulting firm by Tech Innovation Awards.' },
-  ];
+  const navigate = useNavigate();
+
+  const handleNavigate = (path: string) => {
+    window.dispatchEvent(new Event('force-route-transition'));
+    setTimeout(() => navigate(path), 100); // Small delay for transition to start
+  };
+  // const milestones = [
+  //   { year: '2020', title: 'Company Founded', description: 'VisionAI was established with a mission to democratize AI for businesses.' },
+  //   { year: '2021', title: 'First 100 Clients', description: 'Reached our first major milestone serving 100+ businesses across various industries.' },
+  //   { year: '2022', title: 'Series A Funding', description: 'Secured $10M in Series A funding to expand our AI capabilities and team.' },
+  //   { year: '2023', title: 'Global Expansion', description: 'Opened offices in London, Singapore, and Toronto to serve clients worldwide.' },
+  //   { year: '2024', title: 'AI Innovation Award', description: 'Recognized as the leading AI consulting firm by Tech Innovation Awards.' },
+  // ];
 
   const values = [
     {
@@ -60,12 +68,18 @@ const About: React.FC = () => {
               for businesses of all sizes.
             </p>
             <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
-              <a href="/contact" className="inline-flex items-center px-6 py-3 bg-white text-blue-600 rounded-lg hover:bg-gray-100 transition-colors">
+              <button
+                onClick={() => handleNavigate('/contact')}
+                className="inline-flex items-center justify-center px-6 py-3 bg-white text-blue-600 rounded-lg hover:bg-gray-100 transition-colors"
+              >
                 Contact Us
-              </a>
-              <a href="/careers" className="inline-flex items-center px-6 py-3 glass text-white rounded-lg hover:bg-white/20 transition-colors">
+              </button>
+              <button
+                onClick={() => handleNavigate('/careers')}
+                className="inline-flex items-center justify-center px-6 py-3 glass text-white rounded-lg hover:bg-white/20 transition-colors"
+              >
                 Join Our Team
-              </a>
+              </button>
             </div>
           </div>
         </div>
@@ -78,9 +92,7 @@ const About: React.FC = () => {
             <div>
               <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-6">Our Mission</h2>
               <p className="text-lg text-gray-600 dark:text-gray-300 leading-relaxed mb-6">
-                To empower businesses worldwide with intelligent AI solutions that drive growth, 
-                efficiency, and innovation. We believe that every organization, regardless of size, 
-                should have access to the transformative power of artificial intelligence.
+                To lead in technological innovation and set new industry standards by empowering Japan's digital transformation through scalable, AI-driven solutions and strategic global collaboration
               </p>
               <p className="text-lg text-gray-600 dark:text-gray-300 leading-relaxed">
                 Through our expertise in machine learning, data science, and business strategy, 
@@ -132,8 +144,77 @@ const About: React.FC = () => {
           </div>
         </div>
       </section>
+      {/* Leadership Team */}
+      <section className="py-24 bg-white dark:bg-gray-900">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">Our Leadership Team</h2>
+            <p className="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+              Meet the dedicated professionals guiding our organization.
+            </p>
+          </div>
 
-      {/* Timeline */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {[
+              {
+                name: 'Demo',
+                title: 'Managing Director',
+                image: '',
+              },
+              {
+                name: 'Demo',
+                title: 'Executive Director',
+                image: '',
+              },
+              {
+                name: 'Demo',
+                title: 'Director',
+                image: '',
+              },
+            ].map((member, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                viewport={{ once: true }}
+                className="bg-gray-50 dark:bg-gray-800 rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300"
+              >
+                <div className="h-64 bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
+                  <span className="text-gray-400 dark:text-gray-500 text-lg">Photo Coming Soon</span>
+                </div>
+                <div className="p-8 text-center">
+                  <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">{member.name}</h3>
+                  <p className="text-gray-600 dark:text-gray-300">{member.title}</p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+      {/* Join Our Team CTA */}
+      <section className="py-24 bg-gradient-to-r from-blue-600 to-purple-600 text-center text-white">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true }}
+        >
+          <h2 className="text-3xl md:text-4xl font-bold mb-6">Join Our Team</h2>
+          <p className="text-xl text-blue-100 mb-8 max-w-3xl mx-auto">
+            We're always looking for talented, passionate individuals to join our growing team. Explore career opportunities at VisionAI.
+          </p>
+          <button
+            onClick={() => handleNavigate('/careers')}
+            className="inline-flex items-center justify-center px-8 py-4 bg-white text-blue-600 rounded-lg hover:bg-gray-100 transition-colors transform hover:scale-105 duration-300"
+          >
+            View Open Positions
+          </button>
+        </motion.div>
+      </section>
+
+
+      {/* Timeline
       <section className="py-24 bg-white dark:bg-gray-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
@@ -169,9 +250,9 @@ const About: React.FC = () => {
             ))}
           </div>
         </div>
-      </section>
+      </section> */}
 
-      {/* Stats */}
+      {/* Stats
       <section className="py-24 bg-gradient-to-r from-blue-600 to-purple-600">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 text-center">
@@ -193,7 +274,7 @@ const About: React.FC = () => {
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
     </div>
   );
 };

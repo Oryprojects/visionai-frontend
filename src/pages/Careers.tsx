@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { MapPin, Clock, DollarSign, Users, Upload, CheckCircle, ChevronDown, Briefcase, Phone, Cpu, FlaskConical } from 'lucide-react';
+import { MapPin, Clock, DollarSign, Users, Upload, CheckCircle, ChevronDown, Briefcase, Cpu } from 'lucide-react';
 
 interface ApplicationForm {
   name: string;
@@ -70,93 +70,45 @@ const Careers: React.FC = () => {
 
   const jobs = [
     {
-      title: 'Senior AI Engineer',
+      title: 'General Affairs Representative',
+      category: 'General Affairs',
+      icon: <Users className="h-8 w-8" />,
+      location: 'Japan',
+      type: 'Full time',
+      salary: 'JPY 3M',
+      description: 'Support company operations and administration. Requires Japanese language skills and organizational ability.',
+      requirements: [
+        'Fluent in Japanese and English',
+        'Strong organizational and communication skills',
+        'Experience in general affairs or administration preferred',
+      ],
+    },
+    {
+      title: 'Bilingual Generative AI Developer',
       category: 'Engineering',
       icon: <Cpu className="h-8 w-8" />,
-      location: 'San Francisco, CA',
-      type: 'Full-time',
-      salary: '$150,000 - $200,000',
-      description: 'Lead the development of cutting-edge AI solutions for our enterprise clients.',
+      location: 'Japan',
+      type: 'Full time',
+      salary: 'JPY 6M',
+      description: 'Develop and deploy generative AI models. Requires bilingual (Japanese/English) skills.',
       requirements: [
-        '5+ years of experience in AI/ML development',
-        'Strong Python and TensorFlow/PyTorch skills',
-        'Experience with cloud platforms (AWS, GCP, Azure)',
-        'PhD or Master\'s in Computer Science or related field',
+        'Experience with AI/ML and generative models',
+        'Fluent in Japanese and English',
+        'Strong programming skills (Python preferred)',
       ],
     },
     {
-      title: 'Data Scientist',
-      category: 'Research',
-      icon: <FlaskConical className="h-8 w-8" />,
-      location: 'Remote',
-      type: 'Full-time',
-      salary: '$120,000 - $160,000',
-      description: 'Analyze complex datasets and develop predictive models to drive business insights.',
-      requirements: [
-        '3+ years of experience in data science',
-        'Strong statistical analysis and modeling skills',
-        'Proficiency in Python, R, and SQL',
-        'Experience with big data technologies',
-      ],
-    },
-    {
-      title: 'AI Product Manager',
-      category: 'Product',
+      title: 'Bilingual Program Manager',
+      category: 'Management',
       icon: <Briefcase className="h-8 w-8" />,
-      location: 'New York, NY',
-      type: 'Full-time',
-      salary: '$140,000 - $180,000',
-      description: 'Drive product strategy and roadmap for our AI-powered solutions.',
+      location: 'Japan',
+      type: 'Full time',
+      salary: 'JPY 8M to 10M',
+      description: 'Lead AI projects and manage cross-functional teams. Requires bilingual (Japanese/English) skills.',
       requirements: [
-        '4+ years of product management experience',
-        'Strong understanding of AI/ML technologies',
-        'Experience with agile development methodologies',
-        'Excellent communication and leadership skills',
-      ],
-    },
-    {
-      title: 'Machine Learning Engineer',
-      category: 'Engineering',
-      icon: <Cpu className="h-8 w-8" />,
-      location: 'Austin, TX',
-      type: 'Full-time',
-      salary: '$130,000 - $170,000',
-      description: 'Build and deploy scalable ML models in production environments.',
-      requirements: [
-        '3+ years of ML engineering experience',
-        'Strong software engineering skills',
-        'Experience with MLOps and model deployment',
-        'Knowledge of containerization and orchestration',
-      ],
-    },
-    {
-      title: 'AI Research Scientist',
-      category: 'Research',
-      icon: <FlaskConical className="h-8 w-8" />,
-      location: 'Boston, MA',
-      type: 'Full-time',
-      salary: '$160,000 - $220,000',
-      description: 'Conduct cutting-edge research in AI and publish findings in top-tier venues.',
-      requirements: [
-        'PhD in Computer Science, AI, or related field',
-        'Strong publication record in top conferences',
-        'Experience with research methodologies',
-        'Passion for pushing the boundaries of AI',
-      ],
-    },
-    {
-      title: 'AI Consultant',
-      category: 'Consulting',
-      icon: <Phone className="h-8 w-8" />,
-      location: 'Chicago, IL',
-      type: 'Contract',
-      salary: '$100 - $150/hour',
-      description: 'Work directly with clients to implement AI solutions and drive transformation.',
-      requirements: [
-        '5+ years of consulting experience',
-        'Strong business acumen and client-facing skills',
-        'Deep understanding of AI applications',
-        'Experience with change management',
+        'Project management experience',
+        'Fluent in Japanese and English',
+        'Strong leadership and communication skills',
       ],
     },
   ];

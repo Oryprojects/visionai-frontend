@@ -9,34 +9,19 @@ router.post('/', async (req, res) => {
   try {
     const { name, email, subject, message } = req.body;
 
-    // Validate required fields
     if (!name || !email || !subject || !message) {
-      return res.status(400).json({ 
-        message: 'All fields are required' 
-      });
+      return res.status(400).json({ message: 'All fields are required' });
     }
 
-    // Create new contact entry
-    const contact = new Contact({
-      name,
-      email,
-      subject,
-      message,
-    });
-
+    const contact = new Contact({ name, email, subject, message });
     await contact.save();
 
-    // Send email notification
+    // Send email notification using Brevo
     try {
-      await sendContactEmail({
-        name,
-        email,
-        subject,
-        message,
-      });
+      await sendContactEmail({ name, email, subject, message });
+      console.log('Contact emails sent successfully via Brevo');
     } catch (emailError) {
-      console.error('Email sending failed:', emailError);
-      // Don't fail the request if email fails
+      console.error('Brevo email sending failed:', emailError);
     }
 
     res.status(201).json({ 
@@ -46,9 +31,7 @@ router.post('/', async (req, res) => {
 
   } catch (error) {
     console.error('Contact form submission error:', error);
-    res.status(500).json({ 
-      message: 'Error submitting contact form' 
-    });
+    res.status(500).json({ message: 'Error submitting contact form' });
   }
 });
 
