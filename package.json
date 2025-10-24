@@ -5,10 +5,11 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build && cd server && node -e \"console.log('Server packaged for Vercel')\"",
+    "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "server": "node --env-file=.env server/index.js"
+    "server": "node --env-file=.env server/index.js",
+    "vercel-build": "vite build"
   },
   "dependencies": {
     "@getbrevo/brevo": "^3.0.1",
