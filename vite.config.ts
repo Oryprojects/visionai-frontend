@@ -10,6 +10,7 @@ import react from '@vitejs/plugin-react';
 // https://vitejs.dev/config/
 export default defineConfig({
   root: path.resolve(__dirname),
+  base: './',
   publicDir: 'public',
   plugins: [react()],
   optimizeDeps: {
@@ -26,8 +27,12 @@ export default defineConfig({
   },
   build: {
     chunkSizeWarningLimit: 700,
+    outDir: 'dist',
+    emptyOutDir: true,
     rollupOptions: {
-  input: path.resolve(__dirname, 'index.html'),
+      input: {
+        main: path.resolve(__dirname, 'index.html')
+      },
       output: {
         manualChunks(id) {
           if (id.includes('node_modules')) {
