@@ -1,49 +1,43 @@
 import { defineConfig } from 'vite';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+// ESM __dirname shim
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 import react from '@vitejs/plugin-react';
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: '/',
+  root: path.resolve(__dirname),
+  publicDir: 'public',
   plugins: [react()],
-  resolve: {
-    alias: {
-      // Ensure consistent path resolution
-      '@': '/src',
-    },
-  },
   optimizeDeps: {
     exclude: ['lucide-react'],
-    include: ['react', 'react-dom', 'react-router-dom'],
   },
   server: {
     proxy: {
       '/api': {
-        target: 'http://localhost:5000',
+        target: process.env.VITE_API_URL || 'http://localhost:5000',
         changeOrigin: true,
+        secure: false,
       },
     },
   },
   build: {
-    outDir: 'dist',
-    emptyOutDir: true,
-    sourcemap: false, // Disable sourcemaps for production
     chunkSizeWarningLimit: 700,
     rollupOptions: {
-      input: './index.html',
+  input: path.resolve(__dirname, 'index.html'),
       output: {
         manualChunks(id) {
           if (id.includes('node_modules')) {
             if (id.includes('react')) return 'vendor_react';
             if (id.includes('react-router')) return 'vendor_router';
             if (id.includes('lucide-react')) return 'vendor_icons';
-            if (id.includes('framer-motion')) return 'vendor_motion';
             return 'vendor_misc';
           }
         },
       },
     },
-  },
-  define: {
-    'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'production'),
   },
 });

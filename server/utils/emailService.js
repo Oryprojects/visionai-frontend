@@ -5,9 +5,9 @@ dotenv.config();
 const apiInstance = new TransactionalEmailsApi();
 apiInstance.setApiKey(TransactionalEmailsApiApiKeys.apiKey, process.env.BREVO_API_KEY);
 
-const HR_INBOX = process.env.HR_EMAIL;
-const SENDER_EMAIL = "hr@visionai.jp";
-const SENDER_NAME = "VisionAI";
+const HR_INBOX = process.env.HR_EMAIL || 'hr@visionai.jp';
+const SENDER_EMAIL = process.env.SENDER_EMAIL || 'noreply@visionai.jp';
+const SENDER_NAME = process.env.SENDER_NAME || 'VisionAI';
 
 // Generic send mail function
 async function sendMail({ to, subject, htmlContent, attachments }) {
