@@ -11,11 +11,11 @@ try {
   console.log('📦 Installing dependencies...');
   execSync('npm ci', { stdio: 'inherit' });
 
-  // Build the application
-  console.log('🔨 Building application...');
-  execSync('npm run build', { stdio: 'inherit' });
+  // Build the frontend
+  console.log('🔨 Building frontend application...');
+  execSync('npm run build', { stdio: 'inherit', cwd: process.cwd() });
 
-  // Verify build output
+  // Verify frontend build output
   const distDir = path.join(process.cwd(), 'dist');
   if (!fs.existsSync(distDir)) {
     throw new Error('❌ Build output directory not found');

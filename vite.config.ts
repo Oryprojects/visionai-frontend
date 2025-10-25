@@ -22,9 +22,7 @@ export default defineConfig({
     sourcemap: false, // Disable sourcemaps for production
     chunkSizeWarningLimit: 700,
     rollupOptions: {
-      input: {
-        main: './index.html'
-      },
+      input: './index.html',
       output: {
         manualChunks(id) {
           if (id.includes('node_modules')) {
