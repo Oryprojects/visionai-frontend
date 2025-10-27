@@ -1,7 +1,5 @@
 # Development files
 node_modules
-src
-public
 *.md
 .env
 .env.local
