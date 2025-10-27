@@ -6,7 +6,7 @@ const apiInstance = new TransactionalEmailsApi();
 apiInstance.setApiKey(TransactionalEmailsApiApiKeys.apiKey, process.env.BREVO_API_KEY);
 
 const HR_INBOX = process.env.HR_EMAIL || 'hr@visionai.jp';
-const SENDER_EMAIL = process.env.SENDER_EMAIL || 'noreply@visionai.jp';
+const SENDER_EMAIL = process.env.SENDER_EMAIL || 'hr@visionai.jp';
 const SENDER_NAME = process.env.SENDER_NAME || 'VisionAI';
 
 // Generic send mail function

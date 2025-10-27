@@ -30,16 +30,6 @@ export default defineConfig({
       input: {
         main: path.resolve(__dirname, 'index.html'),
       },
-      output: {
-        manualChunks(id) {
-          if (id.includes('node_modules')) {
-            if (id.includes('react')) return 'vendor_react';
-            if (id.includes('react-router')) return 'vendor_router';
-            if (id.includes('lucide-react')) return 'vendor_icons';
-            return 'vendor_misc';
-          }
-        },
-      },
     },
   },
 });
