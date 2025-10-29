@@ -95,36 +95,48 @@ const Home: React.FC = () => {
     <div>
       {/* --- HERO SECTION --- */}
       <section className="relative min-h-screen overflow-hidden bg-black z-20">
-        <video
-          src="/home.mov"
-          className="absolute inset-0 w-full h-full object-cover -z-10"
-          autoPlay
-          muted
-          loop
-          playsInline
-        />
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/50 to-black/80 -z-0"></div>
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(59,130,246,0.25),transparent_60%)] -z-0"></div>
+        {/* Fallback background */}
+        <div className="absolute inset-0 bg-gradient-to-br from-gray-900 to-black -z-20"></div>
+        
+        {/* Video background */}
+        <div className="absolute inset-0 -z-10 overflow-hidden">
+          <video
+            src="/home.mov"
+            className="absolute inset-0 w-full h-full object-cover"
+            autoPlay
+            muted
+            loop
+            playsInline
+          />
         </div>
-        <div className="relative z-10 px-4 sm:px-6 md:px-8 lg:px-16 py-16 sm:py-24 md:py-32 flex items-center justify-center text-center min-h-screen">
-          <div className="w-full max-w-3xl slide-in-once slide-delay-200 px-4 sm:px-6">
-            <h1 className="text-3xl xs:text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-wide leading-tight text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-blue-400 to-purple-400 heading-zoom mb-4 sm:mb-6">
-              WELCOME TO VISION AI
-            </h1>
-            <p className="text-sm xs:text-base sm:text-lg text-blue-100 mb-6 sm:mb-8 max-w-2xl mx-auto sub-wipe slide-delay-400">
-              Intelligence in sight. We craft AI experiences that are fast, reliable, and human-centered.
-            </p>
-            <div className="flex flex-col xs:flex-row gap-3 sm:gap-4 justify-center">
+        
+        {/* Overlay */}
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/70 to-black/90"></div>
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(59,130,246,0.2),transparent_70%)]"></div>
+        </div>
+        <div className="relative z-10 px-4 sm:px-6 md:px-8 py-24 sm:py-32 flex items-center justify-center text-center min-h-screen w-full">
+          <div className="w-full max-w-4xl px-4 sm:px-6 slide-in-once slide-delay-200">
+            <div className="mb-6 sm:mb-8">
+              <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight leading-tight text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-blue-400 to-purple-400 heading-zoom">
+                WELCOME TO VISION AI
+              </h1>
+            </div>
+            <div className="mb-8 sm:mb-10 max-w-2xl mx-auto">
+              <p className="text-base sm:text-lg md:text-xl text-blue-100 font-medium sub-wipe slide-delay-400">
+                Intelligence in sight. We craft AI experiences that are fast, reliable, and human-centered.
+              </p>
+            </div>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <button
                 onClick={() => handleNavigate('/services')}
-                className="inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 text-sm sm:text-base bg-gradient-to-r from-cyan-400 to-blue-600 text-white rounded-lg hover:from-cyan-500 hover:to-blue-700 transition-all duration-200 shadow-3d-hover whitespace-nowrap"
+                className="inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-3.5 text-sm sm:text-base font-medium bg-gradient-to-r from-cyan-400 to-blue-600 text-white rounded-lg hover:from-cyan-500 hover:to-blue-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
               >
                 Explore Services
               </button>
               <button
                 onClick={() => handleNavigate('/careers')}
-                className="inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 text-sm sm:text-base glass text-white rounded-lg hover:bg-white/20 transition-all duration-200 border border-white/25 whitespace-nowrap"
+                className="inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-3.5 text-sm sm:text-base font-medium bg-white/5 backdrop-blur-sm text-white rounded-lg hover:bg-white/10 transition-all duration-200 border border-white/20 hover:border-white/30"
               >
                 Join Us
               </button>
