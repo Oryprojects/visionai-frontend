@@ -166,7 +166,7 @@ const Home: React.FC = () => {
               <video
                 ref={videoRef}
                 id="showcaseVideo"
-                src="/Vision%20Ai%20Video.mp4"
+                src="/Vision Ai Video.mp4"
                 className="absolute inset-0 w-full h-full object-cover"
                 playsInline
                 preload="auto"
