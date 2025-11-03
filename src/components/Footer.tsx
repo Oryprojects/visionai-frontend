@@ -12,7 +12,7 @@ const Footer: React.FC = () => {
               <span className="text-xl font-bold">VisionAI</span> */}
               <Link to="/" className="flex items-center space-x-1 group" aria-label="VisionAI home">
                           {/* Logo only (no text) - medium size */}
-                          <img src="/vision%20ai%20logo.png" alt="VisionAI" className="h-28 md:h-28 w-auto" />
+                          <img src="/vision-removebg-preview.png" alt="VisionAI" className="h-28 md:h-28 w-auto" />
                         </Link>
         
             <p className="text-gray-400 mb-6">
