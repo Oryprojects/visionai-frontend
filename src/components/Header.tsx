@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Menu, X, ChevronDown } from 'lucide-react';
 
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isServicesDropdownOpen, setIsServicesDropdownOpen] = useState(false);
+  const closeTimerRef = useRef<number | null>(null);
   // Dark mode only, no theme context
   const location = useLocation();
   const navigate = useNavigate();
@@ -29,16 +30,44 @@ const Header: React.FC = () => {
   const isActive = (path: string) => location.pathname === path;
   const isServicesActive = () => location.pathname.startsWith('/services');
 
-  // Timer to keep dropdown open for 1 minute
+  // Timer to handle dropdown close delay
   useEffect(() => {
-    let timer: number | undefined;
+    let timerId: number | undefined;
+    
     if (isServicesDropdownOpen) {
-      timer = window.setTimeout(() => {
+      // Clear any existing timer when dropdown is manually opened
+      if (closeTimerRef.current) {
+        window.clearTimeout(closeTimerRef.current);
+        closeTimerRef.current = null;
+      }
+      
+      // Set a timer to close after 1 minute of inactivity
+      timerId = window.setTimeout(() => {
         setIsServicesDropdownOpen(false);
       }, 60000); // 1 minute
+      
+      closeTimerRef.current = timerId;
+      
+      return () => {
+        if (timerId) window.clearTimeout(timerId);
+      };
     }
-    return () => window.clearTimeout(timer);
   }, [isServicesDropdownOpen]);
+  
+  // Function to handle mouse leave with delay
+  const handleMouseLeave = () => {
+    // Only set the timer if the dropdown is open
+    if (isServicesDropdownOpen) {
+      const timerId = window.setTimeout(() => {
+        setIsServicesDropdownOpen(false);
+      }, 300); // 300ms delay before closing
+      
+      closeTimerRef.current = timerId;
+      return () => {
+        if (timerId) window.clearTimeout(timerId);
+      };
+    }
+  };
 
   return (
     <header className="sticky top-0 z-50 bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm border-b border-gray-200 dark:border-gray-700">
@@ -67,8 +96,15 @@ const Header: React.FC = () => {
             {/* Services Dropdown (button also navigates to /services on click) */}
             <div className="relative">
               <button
-                onMouseEnter={() => setIsServicesDropdownOpen(true)}
-                onMouseLeave={() => setIsServicesDropdownOpen(false)}
+                onMouseEnter={() => {
+                  // Clear any pending close timers when re-entering
+                  if (closeTimerRef.current) {
+                    window.clearTimeout(closeTimerRef.current);
+                    closeTimerRef.current = null;
+                  }
+                  setIsServicesDropdownOpen(true);
+                }}
+                onMouseLeave={handleMouseLeave}
                 onClick={() => { window.dispatchEvent(new Event('force-route-transition')); navigate('/services'); }}
                 aria-haspopup="true"
                 aria-expanded={isServicesDropdownOpen}
@@ -84,8 +120,15 @@ const Header: React.FC = () => {
               
               {isServicesDropdownOpen && (
                 <div
-                  onMouseEnter={() => setIsServicesDropdownOpen(true)}
-                  onMouseLeave={() => setIsServicesDropdownOpen(false)}
+                  onMouseEnter={() => {
+                    // Clear any pending close timers when re-entering
+                    if (closeTimerRef.current) {
+                      window.clearTimeout(closeTimerRef.current);
+                      closeTimerRef.current = null;
+                    }
+                    setIsServicesDropdownOpen(true);
+                  }}
+                  onMouseLeave={handleMouseLeave}
                   className="absolute top-full left-0 mt-1 w-64 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 py-2"
                 >
                   <div className="space-y-1">

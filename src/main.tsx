@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client';
 import { MotionConfig } from 'framer-motion';
 import App from './App.tsx';
 import ErrorBoundary from './components/ErrorBoundary.tsx';
+import { VisitedProvider } from './context/VisitedContext';
 import './index.css';
 
 // Ensure DOM is ready before mounting
@@ -17,7 +18,9 @@ root.render(
   <StrictMode>
     <ErrorBoundary>
       <MotionConfig>
-        <App />
+        <VisitedProvider>
+          <App />
+        </VisitedProvider>
       </MotionConfig>
     </ErrorBoundary>
   </StrictMode>

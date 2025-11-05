@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-route
 import { ThemeProvider } from './contexts/ThemeContext';
 import Layout from './components/Layout';
 import RouteTransitionVideo from './components/RouteTransitionVideo';
+import PageTransitionWrapper from './components/PageTransitionWrapper';
 
 // Route-based lazy loaded pages
 const Home = React.lazy(() => import('./pages/Home'));
@@ -38,17 +39,17 @@ function App() {
         }>
           <Routes>
             <Route path="/" element={<Layout />}>
-              <Route index element={<Home />} />
-              <Route path="about" element={<About />} />
-              <Route path="services" element={<Services />} />
-              <Route path="/services/end-to-end-solution-implementation" element={<EndToEndSolutionImplementation />} />
-              <Route path="/services/ai-powered-business-intelligence" element={<AIPoweredBusinessIntelligence />} />
-              <Route path="/services/agentic-ai-systems" element={<AgenticAISystems />} />
-              <Route path="/services/data-driven-analytics" element={<DataDrivenAnalytics />} />
-              <Route path="/services/bot-setup" element={<BOTSetup />} />
-              <Route path="/services/legacy-to-future-transformation" element={<LegacyToFutureTransformation />} />
-              <Route path="careers" element={<Careers />} />
-              <Route path="contact" element={<Contact />} />
+              <Route index element={<PageTransitionWrapper><Home /></PageTransitionWrapper>} />
+              <Route path="about" element={<PageTransitionWrapper><About /></PageTransitionWrapper>} />
+              <Route path="services" element={<PageTransitionWrapper><Services /></PageTransitionWrapper>} />
+              <Route path="/services/end-to-end-solution-implementation" element={<PageTransitionWrapper><EndToEndSolutionImplementation /></PageTransitionWrapper>} />
+              <Route path="/services/ai-powered-business-intelligence" element={<PageTransitionWrapper><AIPoweredBusinessIntelligence /></PageTransitionWrapper>} />
+              <Route path="/services/agentic-ai-systems" element={<PageTransitionWrapper><AgenticAISystems /></PageTransitionWrapper>} />
+              <Route path="/services/data-driven-analytics" element={<PageTransitionWrapper><DataDrivenAnalytics /></PageTransitionWrapper>} />
+              <Route path="/services/bot-setup" element={<PageTransitionWrapper><BOTSetup /></PageTransitionWrapper>} />
+              <Route path="/services/legacy-to-future-transformation" element={<PageTransitionWrapper><LegacyToFutureTransformation /></PageTransitionWrapper>} />
+              <Route path="careers" element={<PageTransitionWrapper><Careers /></PageTransitionWrapper>} />
+              <Route path="contact" element={<PageTransitionWrapper><Contact /></PageTransitionWrapper>} />
               {/* <Route path="blog" element={<Blog />} /> */}
             </Route>
           </Routes>
