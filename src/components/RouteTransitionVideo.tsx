@@ -1,7 +1,7 @@
 // src/components/RouteTransitionVideo.tsx
 import React, { useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { useVisited } from '../context/VisitedContext';
+import { useVisited } from '../contexts/VisitedContext';
 
 const RouteTransitionVideo: React.FC = () => {
   const location = useLocation();
@@ -11,20 +11,35 @@ const RouteTransitionVideo: React.FC = () => {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const firstLoad = useRef(true);
   const initialPath = useRef(location.pathname);
-  const hasVisited = visitedPages.includes(location.pathname);
-
+  
   // Helper function to get the base path (first segment) of a path
   const getBasePath = (path: string) => {
     const segments = path.split('/').filter(Boolean);
     return segments.length > 0 ? `/${segments[0]}` : '/';
   };
 
+  // Helper function to check if path is admin route
+  const isAdminRoute = (path: string) => {
+    return path.startsWith('/admin');
+  };
+
   useEffect(() => {
     if (firstLoad.current) {
-      // Play intro.mp4 on first load
-      setVideoSrc('/intro.mp4');
-      setShow(true);
+      // Don't play intro on admin routes
+      if (!isAdminRoute(location.pathname)) {
+        const videoSrcToSet = '/intro.mp4';
+        React.startTransition(() => {
+          setVideoSrc(videoSrcToSet);
+          setShow(true);
+        });
+      }
       firstLoad.current = false;
+      initialPath.current = location.pathname;
+      return;
+    }
+    
+    // Skip transitions for admin routes
+    if (isAdminRoute(location.pathname)) {
       initialPath.current = location.pathname;
       return;
     }
@@ -36,11 +51,13 @@ const RouteTransitionVideo: React.FC = () => {
     // 1. We're navigating to a different base path (e.g., from /about to /services)
     // 2. The target base path hasn't been visited yet
     if (currentBasePath !== previousBasePath && !visitedPages.includes(currentBasePath)) {
-      setVideoSrc('/transition.mp4');
-      setShow(true);
+      React.startTransition(() => {
+        setVideoSrc('/transition.mp4');
+        setShow(true);
+      });
     }
     
-    // Always update the initialPath to the current path
+    // Always update initialPath to current path
     initialPath.current = location.pathname;
   }, [location.pathname, visitedPages]);
 
@@ -48,12 +65,20 @@ const RouteTransitionVideo: React.FC = () => {
   useEffect(() => {
     const handler = () => {
       const currentPath = window.location.pathname;
+      
+      // Skip transitions for admin routes
+      if (isAdminRoute(currentPath)) {
+        return;
+      }
+      
       const basePath = getBasePath(currentPath);
       
       // Only show transition if the base path hasn't been visited
       if (!visitedPages.includes(basePath)) {
-        setVideoSrc('/transition.mp4');
-        setShow(true);
+        React.startTransition(() => {
+          setVideoSrc('/transition.mp4');
+          setShow(true);
+        });
       }
     };
     

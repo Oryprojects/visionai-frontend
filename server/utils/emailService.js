@@ -105,3 +105,31 @@ export const sendJobApplicationEmail = async ({ name, email, phone, position, me
 
   await Promise.all([sendToHr, sendToApplicant]);
 };
+
+// Send 2FA OTP email
+export const sendOTPEmail = async (email, otp) => {
+  const otpHtmlContent = `
+      <h2>Two-Factor Authentication Code</h2>
+      <p>Your verification code is:</p>
+      <div style="
+        background-color: #f0f0f0;
+        padding: 20px;
+        border-radius: 8px;
+        text-align: center;
+        font-size: 24px;
+        font-weight: bold;
+        letter-spacing: 2px;
+        margin: 20px 0;
+      ">
+        ${otp}
+      </div>
+      <p>This code will expire in 10 minutes.</p>
+      <p>If you didn't request this code, please ignore this email.</p>
+    `;
+  
+  await sendMail({
+    to: email,
+    subject: 'VisionAI Admin - 2FA Verification Code',
+    htmlContent: otpHtmlContent,
+  });
+};

@@ -11,6 +11,24 @@ interface ApplicationForm {
   resume: FileList;
 }
 
+interface Job {
+  _id: string;
+  role: string;
+  description: string;
+  location: string;
+  type: string;
+  department: string;
+  experience: string;
+  salary: string;
+  status: string;
+  requirements: string[];
+  responsibilities: string[];
+  benefits: string[];
+  featured: boolean;
+  slug: string;
+  order: number;
+}
+
 const HeroVideos: React.FC = () => {
   const heroVideos = ['/careers.mov'];
   const [current, setCurrent] = useState(0);
@@ -66,52 +84,40 @@ const Careers: React.FC = () => {
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [jobs, setJobs] = useState<Job[]>([]);
+  const [loading, setLoading] = useState(true);
   const { register, handleSubmit, formState: { errors }, reset, setValue, watch } = useForm<ApplicationForm>();
 
-  const jobs = [
-    {
-      title: 'General Affairs Representative',
-      category: 'General Affairs',
-      icon: <Users className="h-8 w-8" />,
-      location: 'Japan',
-      type: 'Full time',
-      salary: 'JPY 3M',
-      description: 'Support company operations and administration. Requires Japanese language skills and organizational ability.',
-      requirements: [
-        'Fluent in Japanese and English',
-        'Strong organizational and communication skills',
-        'Experience in general affairs or administration preferred',
-      ],
-    },
-    {
-      title: 'Bilingual Generative AI Developer',
-      category: 'Engineering',
-      icon: <Cpu className="h-8 w-8" />,
-      location: 'Japan',
-      type: 'Full time',
-      salary: 'JPY 6M',
-      description: 'Develop and deploy generative AI models. Requires bilingual (Japanese/English) skills.',
-      requirements: [
-        'Experience with AI/ML and generative models',
-        'Fluent in Japanese and English',
-        'Strong programming skills (Python preferred)',
-      ],
-    },
-    {
-      title: 'Bilingual Program Manager',
-      category: 'Management',
-      icon: <Briefcase className="h-8 w-8" />,
-      location: 'Japan',
-      type: 'Full time',
-      salary: 'JPY 8M to 10M',
-      description: 'Lead AI projects and manage cross-functional teams. Requires bilingual (Japanese/English) skills.',
-      requirements: [
-        'Project management experience',
-        'Fluent in Japanese and English',
-        'Strong leadership and communication skills',
-      ],
-    },
-  ];
+  useEffect(() => {
+    fetchJobs();
+  }, []);
+
+  const fetchJobs = async () => {
+    try {
+      const response = await fetch('/api/jobs?status=OPEN');
+      if (response.ok) {
+        const data = await response.json();
+        setJobs(data);
+      }
+    } catch (error) {
+      console.error('Error fetching jobs:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const getIconComponent = (department: string) => {
+    switch (department) {
+      case 'General Affairs':
+        return Users;
+      case 'Engineering':
+        return Cpu;
+      case 'Management':
+        return Briefcase;
+      default:
+        return Briefcase;
+    }
+  };
 
   const onSubmit = async (data: ApplicationForm) => {
     setIsSubmitting(true);
@@ -141,6 +147,14 @@ const Careers: React.FC = () => {
       setIsSubmitting(false);
     }
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -216,16 +230,19 @@ const Careers: React.FC = () => {
                   >
                     <div className="flex items-start gap-4">
                       <div className="h-14 w-14 rounded-xl bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-300 flex items-center justify-center">
-                        {job.icon}
+                        {(() => {
+                          const IconComponent = getIconComponent(job.department);
+                          return <IconComponent className="h-8 w-8" />;
+                        })()}
                       </div>
                       <div>
                         <div className="inline-flex items-center gap-2 mb-1">
-                          <span className="px-3 py-1 text-xs font-semibold rounded-full bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300">{job.category}</span>
+                          <span className="px-3 py-1 text-xs font-semibold rounded-full bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300">{job.department}</span>
                         </div>
-                        <h3 className="text-xl font-semibold text-gray-900 dark:text-white">{job.title}</h3>
+                        <h3 className="text-xl font-semibold text-gray-900 dark:text-white">{job.role}</h3>
                         <div className="mt-2 flex items-center flex-wrap gap-4 text-sm text-gray-600 dark:text-gray-400">
                           <span className="inline-flex items-center"><MapPin className="h-4 w-4 mr-1" />{job.location}</span>
-                          <span className="inline-flex items-center"><Clock className="h-4 w-4 mr-1" />{job.type}</span>
+                          <span className="inline-flex items-center"><Clock className="h-4 w-4 mr-1" />{job.type.replace('_', ' ')}</span>
                           <span className="inline-flex items-center"><DollarSign className="h-4 w-4 mr-1" />{job.salary}</span>
                         </div>
                       </div>
@@ -246,7 +263,7 @@ const Careers: React.FC = () => {
                       </ul>
                       <button
                         onClick={() => {
-                          setValue('position', job.title);
+                          setValue('position', job.role);
                           setIsModalOpen(true);
                         }}
                         className="w-full bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-700 transition-colors"
@@ -318,7 +335,7 @@ const Careers: React.FC = () => {
                     <select {...register('position', { required: 'Position is required' })} className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-800 text-gray-900 dark:text-white">
                       <option value="">Select a position</option>
                       {jobs.map((job, index) => (
-                        <option key={index} value={job.title}>{job.title}</option>
+                        <option key={index} value={job.role}>{job.role}</option>
                       ))}
                       <option value="General Application">General Application</option>
                     </select>

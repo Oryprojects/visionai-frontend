@@ -2,124 +2,41 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Brain, TrendingUp, Zap } from 'lucide-react';
 
+interface ServiceData {
+  _id: string;
+  title: string;
+  description: string;
+  slug: string;
+  features: string[];
+  category: string;
+  status: string;
+  featured: boolean;
+  order: number;
+  icon?: string;
+}
+
+type Service = {
+  icon: React.ComponentType<{ className?: string }>;
+  title: string;
+  description: string;
+  slug: string;
+  features: string[];
+  color: string;
+};
+
 const Services: React.FC = () => {
   const navigate = useNavigate();
-
-  const handleNavigate = (path: string) => {
-    window.dispatchEvent(new Event('force-route-transition'));
-    setTimeout(() => navigate(path), 100); // Small delay for transition to start
-  };
-  const services = [
-    {
-      icon: Brain,
-      title: 'End-to-End Solution Implementation',
-      description: 'Comprehensive delivery from strategy to execution, ensuring seamless integration across systems, processes, and teams.',
-      slug: 'end-to-end-solution-implementation',
-      features: [
-        'Strategy-to-execution delivery',
-        'Seamless system/process/team integration',
-        'Cross-functional execution',
-        'Change management support',
-        'Continuous improvement',
-        'Risk mitigation throughout lifecycle',
-      ],
-      color: 'blue',
-    },
-    {
-      icon: TrendingUp,
-      title: 'AI-Powered Business Intelligence',
-      description: 'Transform raw data into actionable insights using advanced analytics, predictive modeling, and intelligent dashboards.',
-      slug: 'ai-powered-business-intelligence',
-      features: [
-        'Advanced analytics & dashboards',
-        'Predictive modeling',
-        'Data visualization',
-        'Automated reporting',
-        'Real-time insights',
-        'KPI tracking',
-      ],
-      color: 'purple',
-    },
-    {
-      icon: Zap,
-      title: 'Agentic AI Systems',
-      description: 'Deploy autonomous AI agents that plan, decide, and execute tasks with minimal human intervention—driving efficiency and innovation.',
-      slug: 'agentic-ai-systems',
-      features: [
-        'Autonomous AI agents',
-        'Task planning & execution',
-        'Minimal human intervention',
-        'Continuous learning',
-        'Workflow automation',
-        'Innovation acceleration',
-      ],
-      color: 'green',
-    },
-    {
-      icon: TrendingUp,
-      title: 'Data-Driven Analytics',
-      description: 'Leverage structured and unstructured data to uncover trends, optimize operations, and support informed decision-making.',
-      slug: 'data-driven-analytics',
-      features: [
-        'Structured/unstructured data analysis',
-        'Trend discovery',
-        'Operational optimization',
-        'Decision support',
-        'Custom analytics solutions',
-        'Data pipeline design',
-      ],
-      color: 'indigo',
-    },
-    {
-      icon: Brain,
-      title: 'BOT Setup (Build-Operate-Transfer)',
-      description: 'Establish offshore delivery centers with a clear path to ownership, enabling scalability, cost efficiency, and long-term control.',
-      slug: 'bot-setup',
-      features: [
-        'Offshore delivery center setup',
-        'Build-operate-transfer model',
-        'Scalability & cost efficiency',
-        'Knowledge transfer',
-        'Ownership transition',
-        'Long-term control',
-      ],
-      color: 'teal',
-    },
-    {
-      icon: Zap,
-      title: 'Legacy to Future Transformation',
-      description: 'Modernize outdated systems and processes by migrating to cloud-native, AI-enabled architectures that future-proof your business.',
-      slug: 'legacy-to-future-transformation',
-      features: [
-        'Legacy system modernization',
-        'Cloud-native migration',
-        'AI-enabled architectures',
-        'Process reengineering',
-        'Future-proofing',
-        'Risk-managed transformation',
-      ],
-      color: 'cyan',
-    },
-  ];
-
-  const getColorClasses = (color: string) => {
-    const colors = {
-      blue: 'from-blue-500 to-blue-600',
-      purple: 'from-purple-500 to-purple-600',
-      green: 'from-green-500 to-green-600',
-      orange: 'from-orange-500 to-orange-600',
-      indigo: 'from-indigo-500 to-indigo-600',
-      pink: 'from-pink-500 to-pink-600',
-      teal: 'from-teal-500 to-teal-600',
-      cyan: 'from-cyan-500 to-cyan-600',
-    };
-    return colors[color as keyof typeof colors] || colors.blue;
-  };
+  const [servicesData, setServicesData] = useState<ServiceData[]>([]);
+  const [loading, setLoading] = useState(true);
 
   // Hero video rotation state (hoisted to top-level to satisfy hooks rules)
   const heroVideos = ['/service.mov'].filter(Boolean);
   const [current, setCurrent] = useState(0);
   const sectionRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    fetchServices();
+  }, []);
 
   useEffect(() => {
     if (heroVideos.length <= 1) return;
@@ -128,6 +45,67 @@ const Services: React.FC = () => {
     }, 6000);
     return () => clearInterval(id);
   }, [heroVideos.length]);
+
+  const fetchServices = async () => {
+    try {
+      const response = await fetch('/api/services?status=ACTIVE');
+      if (response.ok) {
+        const data = await response.json();
+        setServicesData(data);
+      }
+    } catch (error) {
+      console.error('Error fetching services:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleNavigate = (path: string) => {
+    window.dispatchEvent(new Event('force-route-transition'));
+    setTimeout(() => navigate(path), 100); // Small delay for transition to start
+  };
+
+  const getIconComponent = (iconName?: string) => {
+    switch (iconName) {
+      case 'Brain':
+        return Brain;
+      case 'TrendingUp':
+        return TrendingUp;
+      case 'Zap':
+        return Zap;
+      default:
+        return Brain; // Default icon
+    }
+  };
+
+  const getColorClasses = (category: string) => {
+    const colorMap: { [key: string]: string } = {
+      'Implementation': 'from-blue-500 to-blue-600',
+      'Analytics': 'from-purple-500 to-purple-600',
+      'AI Systems': 'from-green-500 to-green-600',
+      'Setup': 'from-teal-500 to-teal-600',
+      'Transformation': 'from-cyan-500 to-cyan-600',
+    };
+    return colorMap[category] || 'from-blue-500 to-blue-600';
+  };
+
+  // Transform service data to match ServiceCard component expectations
+  const services: Service[] = servicesData.map(service => ({
+    icon: getIconComponent(service.icon),
+    title: service.title,
+    description: service.description,
+    slug: service.slug,
+    features: service.features,
+    color: getColorClasses(service.category)
+  }));
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -185,7 +163,7 @@ const Services: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {services.map((service, index) => (
-              <ServiceCard key={index} service={service} getColorClasses={getColorClasses} />
+              <ServiceCard key={index} service={service} />
             ))}
           </div>
         </div>
@@ -263,16 +241,7 @@ const Services: React.FC = () => {
   );
 };
 
-type Service = {
-  icon: React.ComponentType<{ className?: string }>;
-  title: string;
-  description: string;
-  slug: string;
-  features: string[];
-  color: string;
-};
-
-const ServiceCard: React.FC<{ service: Service; getColorClasses: (c: string) => string }> = ({ service, getColorClasses }) => {
+const ServiceCard: React.FC<{ service: Service }> = ({ service }) => {
   const [cursor, setCursor] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
   const ref = useRef<HTMLDivElement | null>(null);
 
@@ -294,7 +263,7 @@ const ServiceCard: React.FC<{ service: Service; getColorClasses: (c: string) => 
         style={{ background: `radial-gradient(220px at ${cursor.x}px ${cursor.y}px, rgba(59,130,246,0.18), transparent 60%)` }}
       />
 
-      <div className={`w-16 h-16 bg-gradient-to-r ${getColorClasses(service.color)} rounded-2xl flex items-center justify-center mb-6 pulse-3d relative z-10`}>
+      <div className={`w-16 h-16 bg-gradient-to-r ${service.color} rounded-2xl flex items-center justify-center mb-6 pulse-3d relative z-10`}>
         <service.icon className="h-8 w-8 text-white" />
       </div>
 
@@ -311,7 +280,7 @@ const ServiceCard: React.FC<{ service: Service; getColorClasses: (c: string) => 
         <ul className="space-y-2">
           {service.features.map((feature, featureIndex) => (
             <li key={featureIndex} className="flex items-center text-sm text-gray-600 dark:text-gray-300">
-              <div className={`w-2 h-2 bg-gradient-to-r ${getColorClasses(service.color)} rounded-full mr-3`}></div>
+              <div className={`w-2 h-2 bg-gradient-to-r ${service.color} rounded-full mr-3`}></div>
               {feature}
             </li>
           ))}

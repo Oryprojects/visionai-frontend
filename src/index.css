@@ -9,170 +9,22 @@ html {
 }
 /* stylelint-enable */
 
-/* Letter-by-letter intro animation */
-@keyframes letter-left-in {
-  0% {
-    opacity: 0;
-    transform: translateX(-24px);
-  }
-  60% {
-    opacity: 1;
-    transform: translateX(4px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateX(0);
-  }
+/* Custom scrollbar for webkit browsers */
+::-webkit-scrollbar {
+  width: 8px;
 }
 
-.stagger-letters {
-  display: inline-block;
-  will-change: transform, opacity;
+::-webkit-scrollbar-track {
+  background: #1a1a1a;
 }
 
-.stagger-letters .char {
-  display: inline-block;
-  white-space: pre; /* preserve spaces passed as characters */
-  opacity: 0;
-  animation: letter-left-in 0.6s ease forwards;
-  animation-delay: calc(var(--d, 0) * 60ms);
+::-webkit-scrollbar-thumb {
+  background: #4a5568;
+  border-radius: 4px;
 }
 
-/* Advanced AI-themed animations inspired by aiglobe.wpengine.com */
-@keyframes particle-float {
-  0%, 100% { 
-    transform: translateY(0px) translateX(0px) scale(1);
-    opacity: 0.6;
-  }
-  50% { 
-    transform: translateY(-100px) translateX(50px) scale(1.2);
-    opacity: 1;
-  }
-}
-
-@keyframes neural-pulse {
-  0%, 100% { 
-    transform: scale(1) rotate(0deg);
-    box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
-  }
-  50% { 
-    transform: scale(1.1) rotate(180deg);
-    box-shadow: 0 0 40px rgba(59, 130, 246, 0.8);
-  }
-}
-
-@keyframes data-stream-flow {
-  0% { 
-    transform: translateX(-100vw) rotateZ(0deg);
-    opacity: 0;
-  }
-  10% { opacity: 1; }
-  90% { opacity: 1; }
-  100% { 
-    transform: translateX(100vw) rotateZ(360deg);
-    opacity: 0;
-  }
-}
-
-@keyframes holographic-scan {
-  0% { 
-    transform: translateY(100%);
-    opacity: 0;
-  }
-  50% { 
-    opacity: 1;
-  }
-  100% { 
-    transform: translateY(-100%);
-    opacity: 0;
-  }
-}
-
-@keyframes ai-orb-rotation {
-  0% { 
-    transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg);
-  }
-  33% { 
-    transform: rotateX(120deg) rotateY(120deg) rotateZ(120deg);
-  }
-  66% { 
-    transform: rotateX(240deg) rotateY(240deg) rotateZ(240deg);
-  }
-  100% { 
-    transform: rotateX(360deg) rotateY(360deg) rotateZ(360deg);
-  }
-}
-
-@keyframes floating-image-1 {
-  0%, 100% { 
-    transform: translateY(0px) translateX(0px) rotateZ(-8deg) rotateX(5deg) rotateY(10deg);
-  }
-  33% { 
-    transform: translateY(-30px) translateX(15px) rotateZ(-5deg) rotateX(8deg) rotateY(15deg);
-  }
-  66% { 
-    transform: translateY(-15px) translateX(-10px) rotateZ(-12deg) rotateX(2deg) rotateY(5deg);
-  }
-}
-
-@keyframes floating-image-2 {
-  0%, 100% { 
-    transform: translateY(0px) translateX(0px) rotateZ(12deg) rotateX(-8deg) rotateY(-12deg);
-  }
-  33% { 
-    transform: translateY(-25px) translateX(-12px) rotateZ(18deg) rotateX(-12deg) rotateY(-18deg);
-  }
-  66% { 
-    transform: translateY(-35px) translateX(18px) rotateZ(8deg) rotateX(-5deg) rotateY(-8deg);
-  }
-}
-
-@keyframes floating-image-3 {
-  0%, 100% { 
-    transform: translateY(0px) translateX(0px) rotateZ(-15deg) rotateX(12deg) rotateY(8deg);
-  }
-  33% { 
-    transform: translateY(-20px) translateX(20px) rotateZ(-20deg) rotateX(15deg) rotateY(12deg);
-  }
-  66% { 
-    transform: translateY(-10px) translateX(-15px) rotateZ(-10deg) rotateX(8deg) rotateY(5deg);
-  }
-}
-
-@keyframes floating-image-4 {
-  0%, 100% { 
-    transform: translateY(0px) translateX(0px) rotateZ(20deg) rotateX(-15deg) rotateY(-10deg);
-  }
-  33% { 
-    transform: translateY(-18px) translateX(-18px) rotateZ(25deg) rotateX(-20deg) rotateY(-15deg);
-  }
-  66% { 
-    transform: translateY(-28px) translateX(12px) rotateZ(15deg) rotateX(-10deg) rotateY(-5deg);
-  }
-}
-
-@keyframes floating-image-5 {
-  0%, 100% { 
-    transform: translateY(0px) translateX(0px) rotateZ(-25deg) rotateX(18deg) rotateY(15deg);
-  }
-  33% { 
-    transform: translateY(-32px) translateX(25px) rotateZ(-20deg) rotateX(22deg) rotateY(20deg);
-  }
-  66% { 
-    transform: translateY(-20px) translateX(-20px) rotateZ(-30deg) rotateX(15deg) rotateY(10deg);
-  }
-}
-
-@keyframes floating-image-6 {
-  0%, 100% { 
-    transform: translateY(0px) translateX(0px) rotateZ(15deg) rotateX(-12deg) rotateY(-18deg);
-  }
-  33% { 
-    transform: translateY(-25px) translateX(-25px) rotateZ(20deg) rotateX(-18deg) rotateY(-25deg);
-  }
-  66% { 
-    transform: translateY(-40px) translateX(15px) rotateZ(10deg) rotateX(-8deg) rotateY(-12deg);
-  }
+::-webkit-scrollbar-thumb:hover {
+  background: #718096;
 }
 
 @keyframes text-glow-pulse {

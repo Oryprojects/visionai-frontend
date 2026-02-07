@@ -1,7 +1,8 @@
-import { useEffect, useCallback } from "react";
+import React from 'react';
+import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { useVisited } from "../context/VisitedContext";
+import { useVisited } from "../contexts/VisitedContext";
 
 interface PageTransitionWrapperProps {
   children: React.ReactNode;

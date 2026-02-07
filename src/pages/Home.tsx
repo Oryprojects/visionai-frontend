@@ -1,23 +1,68 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ArrowRight, Brain, TrendingUp, Zap, CheckCircle } from 'lucide-react';
 
+interface Service {
+  _id: string;
+  title: string;
+  description: string;
+  slug: string;
+  features: string[];
+  category: string;
+  status: string;
+  featured: boolean;
+  order: number;
+  icon?: string;
+}
+
 const Home: React.FC = () => {
   const navigate = useNavigate();
+  const [services, setServices] = useState<Service[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchServices();
+  }, []);
+
+  const fetchServices = async () => {
+    try {
+      const response = await fetch('/api/services?status=ACTIVE&featured=true');
+      if (response.ok) {
+        const data = await response.json();
+        setServices(data.slice(0, 6)); // Limit to 6 services for homepage
+      }
+    } catch (error) {
+      console.error('Error fetching services:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleNavigate = (path: string) => {
     window.dispatchEvent(new Event('force-route-transition'));
     setTimeout(() => navigate(path), 100);
   };
 
-  const services = [
-    { icon: Brain, title: 'End-to-End Solution Implementation', description: 'Comprehensive delivery from strategy to execution, ensuring seamless integration across systems, processes, and teams.', link: '/services/end-to-end-solution-implementation' },
-    { icon: TrendingUp, title: 'AI-Powered Business Intelligence', description: 'Transform raw data into actionable insights using advanced analytics, predictive modeling, and intelligent dashboards.', link: '/services/ai-powered-business-intelligence' },
-    { icon: Zap, title: 'Agentic AI Systems', description: 'Deploy autonomous AI agents that plan, decide, and execute tasks with minimal human intervention—driving efficiency and innovation.', link: '/services/agentic-ai-systems' },
-    { icon: TrendingUp, title: 'Data-Driven Analytics', description: 'Leverage structured and unstructured data to uncover trends, optimize operations, and support informed decision-making.', link: '/services/data-driven-analytics' },
-    { icon: Brain, title: 'BOT Setup (Build-Operate-Transfer)', description: 'Establish offshore delivery centers with a clear path to ownership, enabling scalability, cost efficiency, and long-term control.', link: '/services/bot-setup' },
-    { icon: Zap, title: 'Legacy to Future Transformation', description: 'Modernize outdated systems and processes by migrating to cloud-native, AI-enabled architectures that future-proof your business.', link: '/services/legacy-to-future-transformation' },
-  ];
+  const getIconComponent = (iconName?: string) => {
+    switch (iconName) {
+      case 'Brain':
+        return Brain;
+      case 'TrendingUp':
+        return TrendingUp;
+      case 'Zap':
+        return Zap;
+      default:
+        return Brain; // Default icon
+    }
+  };
+
+  // Transform services for homepage display
+  const homepageServices = services.map(service => ({
+    icon: getIconComponent(service.icon),
+    title: service.title,
+    description: service.description,
+    link: `/services/${service.slug}`
+  }));
 
   const globalPartners = [
     {
@@ -75,12 +120,16 @@ const Home: React.FC = () => {
             try {
               video.muted = true;
               video.play().catch(() => {});
-            } catch {}
+            } catch {
+              // Handle video play error
+            }
           } else {
             try {
               video.pause();
               video.currentTime = 0;
-            } catch {}
+            } catch {
+              // Handle video pause error
+            }
           }
         });
       },
@@ -90,6 +139,14 @@ const Home: React.FC = () => {
     io.observe(container);
     return () => io.disconnect();
   }, []);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -107,6 +164,7 @@ const Home: React.FC = () => {
             muted
             loop
             playsInline
+            preload="auto"
           />
         </div>
         
@@ -168,6 +226,8 @@ const Home: React.FC = () => {
                 id="showcaseVideo"
                 src="/Vision Ai (9)-VEED (online-video-cutter.com).mp4"
                 className="absolute inset-0 w-full h-full object-cover"
+                autoPlay
+                muted
                 playsInline
                 preload="auto"
                 poster="/VisionAILogo.png"
@@ -241,7 +301,7 @@ const Home: React.FC = () => {
             </p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
-            {services.map((service, index) => (
+            {homepageServices.map((service, index) => (
               <div
                 key={index}
                 className={`relative group bg-white dark:bg-gray-900 rounded-2xl p-8 shadow-3d-hover border border-gray-100 dark:border-gray-700 overflow-hidden flex flex-col reveal reveal-up reveal-delay-${(index % 3) + 1}`}

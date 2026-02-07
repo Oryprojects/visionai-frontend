@@ -11,10 +11,14 @@ import fs from 'fs';
 
 import contactRoutes from './routes/contact.js';
 import careerRoutes from './routes/careers.js';
+import adminRoutes from './routes/admin.js';
+import servicesRoutes from './routes/services.js';
+import jobsRoutes from './routes/jobs.js';
+import aboutRoutes from './routes/about.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-dotenv.config();
+dotenv.config({ path: path.join(__dirname, '..', '.env') });
 
 const app = express();
 
@@ -77,6 +81,10 @@ connectMongo();
 // Routes
 app.use('/api/contact', contactRoutes);
 app.use('/api/careers', careerRoutes);
+app.use('/api/admin', adminRoutes);
+app.use('/api/services', servicesRoutes);
+app.use('/api/jobs', jobsRoutes);
+app.use('/api/about', aboutRoutes);
 
 app.get('/api/health', (_, res) =>
   res.json({ status: 'OK', timestamp: new Date().toISOString() })

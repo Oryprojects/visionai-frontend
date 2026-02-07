@@ -174,10 +174,10 @@ const Header: React.FC = () => {
 
           <div className="flex items-center space-x-4">
             <Link
-              to="/contact"
+              to="/admin"
               className="hidden md:inline-flex px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-300 shadow-3d-hover"
             >
-              Get Started
+              Admin
             </Link>
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -264,11 +264,11 @@ const Header: React.FC = () => {
               ))}
               
               <Link
-                to="/contact"
+                to="/admin"
                 onClick={() => setIsMenuOpen(false)}
                 className="px-3 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-300 text-center"
               >
-                Get Started
+                Admin
               </Link>
             </nav>
           </div>
