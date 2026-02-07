@@ -14,8 +14,27 @@ const Login: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [twoFactorData, setTwoFactorData] = useState<{ adminId: string; email: string } | null>(null);
 
-  const { login } = useAuth();
+  const auth = useAuth();
   const navigate = useNavigate();
+
+  // Handle case where auth context is not available
+  if (!auth) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  const { login } = auth;
+
+  // Debug logging
+  React.useEffect(() => {
+    console.log('Login component mounted');
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;

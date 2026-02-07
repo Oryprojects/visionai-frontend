@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react';
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { AuthProvider } from './contexts/AuthContext';
 import Layout from './components/Layout';
@@ -35,14 +35,8 @@ const AdminProfile = React.lazy(() => import('./pages/admin/Profile.tsx'));
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const token = localStorage.getItem('adminToken');
   
-  React.useEffect(() => {
-    if (!token) {
-      window.location.href = '/admin/login';
-    }
-  }, [token]);
-
   if (!token) {
-    return null;
+    return <Navigate to="/admin/login" replace />;
   }
 
   return <>{children}</>;
@@ -84,7 +78,7 @@ function App() {
                 {/* <Route path="blog" element={<Blog />} /> */}
               </Route>
               
-              {/* Admin Routes */}
+              {/* Admin Routes - Standalone without Layout */}
               <Route path="/admin/login" element={<Login />} />
               <Route path="/admin" element={
                 <ProtectedRoute>
