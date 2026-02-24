@@ -7,10 +7,9 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "start": "node server/index.js",
-    "vercel-build": "npm run build",
-    "create-admin": "node server/scripts/createAdmin.js",
-    "seed-data": "node server/scripts/seedData.js"
+    "start": "node backend/server/index.js",
+    "create-admin": "node backend/server/scripts/createAdmin.js",
+    "seed-data": "node backend/server/scripts/seedData.js"
   },
   "engines": {
     "node": ">=18.0.0"
