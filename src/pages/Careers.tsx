@@ -29,6 +29,87 @@ interface Job {
   order: number;
 }
 
+const FALLBACK_JOBS: Job[] = [
+  {
+    _id: '1',
+    role: 'AI/ML Engineer',
+    description: 'Design, develop, and deploy machine learning models and AI solutions for enterprise clients across APAC. You will work closely with solution architects to build cutting-edge AI systems.',
+    location: 'Tsukuba, Japan / Remote',
+    type: 'FULL_TIME',
+    department: 'Engineering',
+    experience: '3+ years',
+    salary: '¥8M – ¥12M / year',
+    status: 'OPEN',
+    requirements: [
+      'Strong proficiency in Python, TensorFlow or PyTorch',
+      'Experience with LLMs, RAG systems, and agentic frameworks',
+      'Familiarity with cloud platforms (AWS, Azure, or GCP)',
+      'Excellent communication skills in English (Japanese is a plus)',
+    ],
+    responsibilities: [
+      'Build and fine-tune LLM-based solutions for client use cases',
+      'Collaborate with cross-functional teams on AI architecture design',
+      'Write clean, maintainable, production-ready code',
+    ],
+    benefits: ['Competitive salary', 'Flexible remote work', 'Learning budget', 'Health insurance'],
+    featured: true,
+    slug: 'ai-ml-engineer',
+    order: 1,
+  },
+  {
+    _id: '2',
+    role: 'Full-Stack Developer',
+    description: 'Build robust web applications and APIs that power our AI-driven platforms. You will work on both the frontend (React/TypeScript) and backend (Node.js/Express) sides of our product.',
+    location: 'Tsukuba, Japan / Hybrid',
+    type: 'FULL_TIME',
+    department: 'Engineering',
+    experience: '2+ years',
+    salary: '¥6M – ¥10M / year',
+    status: 'OPEN',
+    requirements: [
+      'Proficiency in React, TypeScript, and Node.js',
+      'Experience with REST APIs and MongoDB / PostgreSQL',
+      'Understanding of CI/CD pipelines and DevOps practices',
+      'Team player with strong problem-solving skills',
+    ],
+    responsibilities: [
+      'Develop new features for client-facing web portals',
+      'Maintain and optimize existing backend services',
+      'Work closely with the AI/ML team to integrate models into production',
+    ],
+    benefits: ['Competitive salary', 'Annual performance bonus', 'Training & certifications', 'Collaborative team culture'],
+    featured: true,
+    slug: 'full-stack-developer',
+    order: 2,
+  },
+  {
+    _id: '3',
+    role: 'Business Development Manager',
+    description: 'Drive new business growth by identifying, engaging, and closing enterprise clients across Japan and Southeast Asia. You will represent VisionAI at industry events and build long-term partnerships.',
+    location: 'Tokyo, Japan',
+    type: 'FULL_TIME',
+    department: 'Management',
+    experience: '5+ years in B2B tech sales',
+    salary: '¥10M – ¥15M + commission',
+    status: 'OPEN',
+    requirements: [
+      'Proven track record in B2B enterprise software or IT services sales',
+      'Professional-level Japanese (JLPT N2 or above)',
+      'Strong network in the Japanese technology ecosystem',
+      'Excellent negotiation and presentation skills',
+    ],
+    responsibilities: [
+      'Identify and develop new enterprise client relationships',
+      'Lead RFQ/RFP responses and proposal development',
+      'Coordinate with delivery teams to ensure client success',
+    ],
+    benefits: ['High OTE compensation', 'Equity options', 'Travel allowance', 'Executive mentorship'],
+    featured: true,
+    slug: 'business-development-manager',
+    order: 3,
+  },
+];
+
 const HeroVideos: React.FC = () => {
   const heroVideos = ['/careers.mov'];
   const [current, setCurrent] = useState(0);
@@ -97,7 +178,10 @@ const Careers: React.FC = () => {
       const response = await fetch('/api/jobs?status=OPEN');
       if (response.ok) {
         const data = await response.json();
-        setJobs(data);
+        if (Array.isArray(data) && data.length > 0) {
+          setJobs(data);
+        }
+        // If API returns empty, we show fallback jobs below
       }
     } catch (error) {
       console.error('Error fetching jobs:', error);
@@ -105,6 +189,9 @@ const Careers: React.FC = () => {
       setLoading(false);
     }
   };
+
+  // Use live data from API if available, otherwise fall back to static jobs
+  const displayJobs = jobs.length > 0 ? jobs : FALLBACK_JOBS;
 
   const getIconComponent = (department: string) => {
     switch (department) {
@@ -171,7 +258,7 @@ const Careers: React.FC = () => {
               We offer more than just a job - we provide a platform to shape the future of AI.
             </p>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="text-center p-6">
               <div className="w-16 h-16 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -182,7 +269,7 @@ const Careers: React.FC = () => {
                 Work alongside industry experts and researchers from top universities and companies.
               </p>
             </div>
-            
+
             <div className="text-center p-6">
               <div className="w-16 h-16 bg-purple-100 dark:bg-purple-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
                 <DollarSign className="h-8 w-8 text-purple-600 dark:text-purple-400" />
@@ -192,7 +279,7 @@ const Careers: React.FC = () => {
                 Excellent compensation, equity, benefits, and flexible work arrangements.
               </p>
             </div>
-            
+
             <div className="text-center p-6">
               <div className="w-16 h-16 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
                 <CheckCircle className="h-8 w-8 text-green-600 dark:text-green-400" />
@@ -217,9 +304,9 @@ const Careers: React.FC = () => {
               Find your next opportunity to make a difference.
             </p>
           </div>
-          
+
           <div className="grid grid-cols-1 gap-6 max-w-3xl mx-auto">
-            {jobs.map((job, index) => {
+            {displayJobs.map((job, index) => {
               const isOpen = expandedIndex === index;
               return (
                 <div key={index} className={`bg-white dark:bg-gray-900 rounded-2xl shadow border ${isOpen ? 'border-blue-300 dark:border-blue-700' : 'border-gray-200 dark:border-gray-700'}`}>
@@ -334,7 +421,7 @@ const Careers: React.FC = () => {
                     <label htmlFor="position" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Position *</label>
                     <select {...register('position', { required: 'Position is required' })} className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-800 text-gray-900 dark:text-white">
                       <option value="">Select a position</option>
-                      {jobs.map((job, index) => (
+                      {displayJobs.map((job, index) => (
                         <option key={index} value={job.role}>{job.role}</option>
                       ))}
                       <option value="General Application">General Application</option>

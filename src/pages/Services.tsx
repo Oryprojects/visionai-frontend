@@ -24,6 +24,45 @@ type Service = {
   color: string;
 };
 
+const FALLBACK_SERVICES: ServiceData[] = [
+  {
+    _id: '1', title: 'End-to-End Solution Implementation', slug: 'end-to-end-solution-implementation',
+    description: 'Comprehensive AI integration from strategy to deployment, ensuring seamless adoption across your entire organization with minimal disruption.',
+    features: ['Full lifecycle management', 'Custom AI model development', 'Legacy system integration', 'Post-deployment support'],
+    category: 'Implementation', status: 'ACTIVE', featured: true, order: 1, icon: 'Brain',
+  },
+  {
+    _id: '2', title: 'AI-Powered Business Intelligence', slug: 'ai-powered-business-intelligence',
+    description: 'Transform raw data into actionable insights with our advanced AI analytics platform that drives smarter, faster decision-making.',
+    features: ['Real-time dashboards', 'Predictive analytics', 'Automated reporting', 'Multi-source data integration'],
+    category: 'Analytics', status: 'ACTIVE', featured: true, order: 2, icon: 'TrendingUp',
+  },
+  {
+    _id: '3', title: 'Agentic AI Systems', slug: 'agentic-ai-systems',
+    description: 'Deploy autonomous AI agents that can plan, reason, and execute complex multi-step tasks with minimal human intervention.',
+    features: ['Multi-agent orchestration', 'Task automation', 'Natural language interfaces', 'Continuous learning'],
+    category: 'AI Systems', status: 'ACTIVE', featured: true, order: 3, icon: 'Zap',
+  },
+  {
+    _id: '4', title: 'Data-Driven Analytics', slug: 'data-driven-analytics',
+    description: 'Unlock the full potential of your data with our advanced analytics services, turning complex datasets into clear strategic advantages.',
+    features: ['Data pipeline setup', 'Statistical modeling', 'Visualization & reporting', 'Performance tracking'],
+    category: 'Transformation', status: 'ACTIVE', featured: true, order: 4, icon: 'Brain',
+  },
+  {
+    _id: '5', title: 'BOT Setup (Build-Operate-Transfer)', slug: 'bot-setup',
+    description: 'Establish, operate, and seamlessly transfer AI-powered business units to your organization with zero knowledge loss.',
+    features: ['Dedicated offshore team setup', 'Knowledge transfer protocols', 'Operational handover', 'SLA-backed services'],
+    category: 'Setup', status: 'ACTIVE', featured: true, order: 5, icon: 'Zap',
+  },
+  {
+    _id: '6', title: 'Legacy to Future Transformation', slug: 'legacy-to-future-transformation',
+    description: 'Modernize your legacy systems with AI-powered migration strategies that minimize risk and maximize business continuity.',
+    features: ['System audit & assessment', 'Phased migration planning', 'AI-enhanced modernization', 'Zero-downtime transitions'],
+    category: 'Transformation', status: 'ACTIVE', featured: true, order: 6, icon: 'TrendingUp',
+  },
+];
+
 const Services: React.FC = () => {
   const navigate = useNavigate();
   const [servicesData, setServicesData] = useState<ServiceData[]>([]);
@@ -51,7 +90,10 @@ const Services: React.FC = () => {
       const response = await fetch('/api/services?status=ACTIVE');
       if (response.ok) {
         const data = await response.json();
-        setServicesData(data);
+        if (Array.isArray(data) && data.length > 0) {
+          setServicesData(data);
+        }
+        // If API returns empty array, we keep servicesData empty and use fallback below
       }
     } catch (error) {
       console.error('Error fetching services:', error);
@@ -89,8 +131,11 @@ const Services: React.FC = () => {
     return colorMap[category] || 'from-blue-500 to-blue-600';
   };
 
+  // Use live data from API if available, otherwise fall back to static services
+  const sourceData = servicesData.length > 0 ? servicesData : FALLBACK_SERVICES;
+
   // Transform service data to match ServiceCard component expectations
-  const services: Service[] = servicesData.map(service => ({
+  const services: Service[] = sourceData.map(service => ({
     icon: getIconComponent(service.icon),
     title: service.title,
     description: service.description,
@@ -180,7 +225,7 @@ const Services: React.FC = () => {
               A proven methodology to deliver successful AI implementations.
             </p>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             {[
               { step: '01', title: 'Discovery', description: 'We analyze your business needs and identify AI opportunities.' },
@@ -213,7 +258,7 @@ const Services: React.FC = () => {
         <div className="absolute bottom-10 right-10 sphere-3d opacity-30">
           <div className="w-32 h-32 bg-white/20 rounded-full"></div>
         </div>
-        
+
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
             Ready to Get Started?

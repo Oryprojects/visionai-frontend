@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ArrowRight, Brain, TrendingUp, Zap, CheckCircle } from 'lucide-react';
+import { ArrowRight, Brain, TrendingUp, Zap, CheckCircle, Settings, Database, Bot } from 'lucide-react';
 
 interface Service {
   _id: string;
@@ -15,10 +15,50 @@ interface Service {
   icon?: string;
 }
 
+// Fallback services data for when the API is unavailable
+const fallbackServices = [
+  {
+    icon: Settings,
+    title: 'End-to-End Solution Implementation',
+    description: 'Comprehensive solution design, development, and deployment tailored to your business needs with seamless integration.',
+    link: '/services/end-to-end-solution-implementation'
+  },
+  {
+    icon: Brain,
+    title: 'AI-Powered Business Intelligence',
+    description: 'Harness the power of artificial intelligence to unlock actionable insights and drive smarter business decisions.',
+    link: '/services/ai-powered-business-intelligence'
+  },
+  {
+    icon: Bot,
+    title: 'Agentic AI Systems',
+    description: 'Build autonomous AI agents that can reason, plan, and execute complex tasks to streamline your operations.',
+    link: '/services/agentic-ai-systems'
+  },
+  {
+    icon: Database,
+    title: 'Data-Driven Analytics',
+    description: 'Transform raw data into meaningful analytics that fuel strategic growth and operational efficiency.',
+    link: '/services/data-driven-analytics'
+  },
+  {
+    icon: TrendingUp,
+    title: 'BOT Setup',
+    description: 'Set up Build-Operate-Transfer models that establish dedicated offshore teams aligned with your business goals.',
+    link: '/services/bot-setup'
+  },
+  {
+    icon: Zap,
+    title: 'Legacy to Future Transformation',
+    description: 'Modernize legacy systems with cutting-edge technology to ensure scalability, security, and performance.',
+    link: '/services/legacy-to-future-transformation'
+  },
+];
+
 const Home: React.FC = () => {
   const navigate = useNavigate();
   const [services, setServices] = useState<Service[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [servicesLoading, setServicesLoading] = useState(true);
 
   useEffect(() => {
     fetchServices();
@@ -29,12 +69,14 @@ const Home: React.FC = () => {
       const response = await fetch('/api/services?status=ACTIVE&featured=true');
       if (response.ok) {
         const data = await response.json();
-        setServices(data.slice(0, 6)); // Limit to 6 services for homepage
+        if (data && data.length > 0) {
+          setServices(data.slice(0, 6)); // Limit to 6 services for homepage
+        }
       }
     } catch (error) {
       console.error('Error fetching services:', error);
     } finally {
-      setLoading(false);
+      setServicesLoading(false);
     }
   };
 
@@ -51,18 +93,26 @@ const Home: React.FC = () => {
         return TrendingUp;
       case 'Zap':
         return Zap;
+      case 'Settings':
+        return Settings;
+      case 'Database':
+        return Database;
+      case 'Bot':
+        return Bot;
       default:
         return Brain; // Default icon
     }
   };
 
-  // Transform services for homepage display
-  const homepageServices = services.map(service => ({
+  // Transform API services for homepage display, or use fallback if none loaded
+  const apiServices = services.map(service => ({
     icon: getIconComponent(service.icon),
     title: service.title,
     description: service.description,
     link: `/services/${service.slug}`
   }));
+
+  const homepageServices = apiServices.length > 0 ? apiServices : fallbackServices;
 
   const globalPartners = [
     {
@@ -119,7 +169,7 @@ const Home: React.FC = () => {
           if (entry.isIntersecting) {
             try {
               video.muted = true;
-              video.play().catch(() => {});
+              video.play().catch(() => { });
             } catch {
               // Handle video play error
             }
@@ -140,21 +190,13 @@ const Home: React.FC = () => {
     return () => io.disconnect();
   }, []);
 
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-      </div>
-    );
-  }
-
   return (
     <div>
       {/* --- HERO SECTION --- */}
       <section className="relative min-h-screen overflow-hidden bg-black z-20">
         {/* Fallback background */}
         <div className="absolute inset-0 bg-gradient-to-br from-gray-900 to-black -z-20"></div>
-        
+
         {/* Video background */}
         <div className="absolute inset-0 -z-10 overflow-hidden">
           <video
@@ -167,7 +209,7 @@ const Home: React.FC = () => {
             preload="auto"
           />
         </div>
-        
+
         {/* Overlay */}
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/70 to-black/90"></div>
@@ -241,7 +283,7 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-  {/* About VisionAI Section */}
+      {/* About VisionAI Section */}
       <section className="py-24 bg-white dark:bg-gray-900 reveal reveal-up">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
@@ -249,11 +291,11 @@ const Home: React.FC = () => {
               About VisionAI
             </h2>
             <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-              Vision AI bridges Japan's technological resource gap by leveraging offshore talent to deliver cutting-edge, AI-driven solutions. 
+              Vision AI bridges Japan's technological resource gap by leveraging offshore talent to deliver cutting-edge, AI-driven solutions.
               We help clients establish focused Global Capability Centers (GCCs) that serve as execution hubs, streamline operations, and reduce the complexity of multi-vendor management through strategic resource transfer and centralized delivery.
             </p>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="text-center p-6 card-3d reveal reveal-up">
               <div className="w-16 h-16 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center mx-auto mb-4 pulse-3d">
@@ -264,7 +306,7 @@ const Home: React.FC = () => {
                 Over 500 successful AI implementations with measurable ROI improvements.
               </p>
             </div>
-            
+
             <div className="text-center p-6 card-3d reveal reveal-up reveal-delay-2">
               <div className="w-16 h-16 bg-purple-100 dark:bg-purple-900/30 rounded-full flex items-center justify-center mx-auto mb-4 pulse-3d">
                 <Brain className="h-8 w-8 text-purple-600 dark:text-purple-400" />
@@ -274,7 +316,7 @@ const Home: React.FC = () => {
                 World-class AI researchers and industry veterans with decades of experience.
               </p>
             </div>
-            
+
             <div className="text-center p-6 card-3d reveal reveal-up reveal-delay-3">
               <div className="w-16 h-16 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mx-auto mb-4 pulse-3d">
                 <Zap className="h-8 w-8 text-green-600 dark:text-green-400" />
@@ -289,7 +331,7 @@ const Home: React.FC = () => {
       </section>
 
 
-       {/* Services Section */}
+      {/* Services Section */}
       <section className="py-24 bg-gradient-to-br from-blue-50 via-purple-50 to-white dark:from-gray-800 dark:via-gray-900 dark:to-gray-950 reveal reveal-up">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
@@ -351,11 +393,11 @@ const Home: React.FC = () => {
               Our Global Partners
             </h2>
             <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-              We collaborate with leading technology companies to deliver world-class AI solutions 
+              We collaborate with leading technology companies to deliver world-class AI solutions
               that drive innovation and business transformation.
             </p>
           </div>
-          
+
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
             {globalPartners.map((partner, index) => (
               <div
@@ -363,7 +405,7 @@ const Home: React.FC = () => {
                 className={`relative group bg-white dark:bg-gray-900 rounded-2xl p-8 shadow-3d-hover border border-gray-100 dark:border-gray-700 overflow-hidden flex flex-col items-center justify-between reveal reveal-up reveal-delay-${(index % 3) + 1}`}
                 style={{ minHeight: '340px' }}
               >
-                <img src={partner.logo} alt={partner.name} className="mb-6 object-contain" style={{height:'72px', maxWidth:'180px'}} />
+                <img src={partner.logo} alt={partner.name} className="mb-6 object-contain" style={{ height: '72px', maxWidth: '180px' }} />
                 <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-3 text-center">{partner.name}</h3>
                 <p className="text-gray-600 dark:text-gray-300 mb-6 text-center">{partner.description}</p>
                 <div className="mt-auto pt-2">
@@ -372,7 +414,7 @@ const Home: React.FC = () => {
               </div>
             ))}
           </div>
-          
+
           {/* Partnership CTA */}
           <div className="text-center mt-12">
             <p className="text-gray-600 dark:text-gray-400 mb-6">
@@ -397,11 +439,11 @@ const Home: React.FC = () => {
               Join Our Team
             </h2>
             <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-              Be part of a revolutionary team that's shaping the future of AI. 
+              Be part of a revolutionary team that's shaping the future of AI.
               We're looking for passionate individuals to help us transform businesses worldwide.
             </p>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
             <div className="text-center p-6 bg-white dark:bg-gray-900 rounded-xl shadow-3d-hover">
               <div className="w-16 h-16 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center mx-auto mb-4 pulse-3d">
@@ -412,7 +454,7 @@ const Home: React.FC = () => {
                 Work on cutting-edge AI projects that push the boundaries of what's possible.
               </p>
             </div>
-            
+
             <div className="text-center p-6 bg-white dark:bg-gray-900 rounded-xl shadow-3d-hover">
               <div className="w-16 h-16 bg-purple-100 dark:bg-purple-900/30 rounded-full flex items-center justify-center mx-auto mb-4 pulse-3d">
                 <TrendingUp className="h-8 w-8 text-purple-600 dark:text-purple-400" />
@@ -422,7 +464,7 @@ const Home: React.FC = () => {
                 Accelerate your career with mentorship from industry experts and continuous learning.
               </p>
             </div>
-            
+
             <div className="text-center p-6 bg-white dark:bg-gray-900 rounded-xl shadow-3d-hover">
               <div className="w-16 h-16 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mx-auto mb-4 pulse-3d">
                 <CheckCircle className="h-8 w-8 text-green-600 dark:text-green-400" />
@@ -433,7 +475,7 @@ const Home: React.FC = () => {
               </p>
             </div>
           </div>
-          
+
           <div className="text-center">
             <Link
               to="/careers"
@@ -455,7 +497,7 @@ const Home: React.FC = () => {
         <div className="absolute bottom-10 right-10 neural-node opacity-30">
           <div className="w-32 h-32 bg-white/20 rounded-full"></div>
         </div>
-        
+
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
             Ready to Transform Your Business?

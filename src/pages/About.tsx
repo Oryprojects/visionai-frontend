@@ -40,10 +40,38 @@ interface AboutData {
   };
 }
 
+const FALLBACK_ABOUT: AboutData = {
+  _id: 'fallback',
+  companyInfo: {
+    mission:
+      'To empower businesses across Asia and beyond with cutting-edge AI-driven solutions that bridge technological resource gaps, accelerate digital transformation, and deliver measurable, sustainable value.',
+    vision:
+      'To be the most trusted AI transformation partner in the Asia-Pacific region — enabling every organization we serve to harness the full potential of intelligent automation and data-driven decision-making.',
+    description:
+      'Vision AI bridges Japan\'s technological resource gap by leveraging offshore talent to deliver cutting-edge, AI-driven solutions. We help clients establish focused Global Capability Centers (GCCs) that serve as execution hubs, streamline operations, and reduce the complexity of multi-vendor management.',
+    foundedYear: 2020,
+    teamSize: '50+',
+    headquarters: 'Tsukuba, Ibaraki, Japan',
+  },
+  contactInfo: {
+    email: 'sales@visionai.jp',
+    phone: '+81-50-8894-4567',
+    address: '305-0861, Ibaraki, Tsukuba, Yatabe 1077-58',
+  },
+  directors: [],
+  stats: {
+    projectsCompleted: 500,
+    clientsServed: 120,
+    yearsExperience: 5,
+    teamMembers: 50,
+  },
+};
+
 const About: React.FC = () => {
   const navigate = useNavigate();
   const [aboutData, setAboutData] = useState<AboutData | null>(null);
   const [loading, setLoading] = useState(true);
+  const [apiError, setApiError] = useState(false);
 
   useEffect(() => {
     fetchAboutData();
@@ -54,14 +82,20 @@ const About: React.FC = () => {
       const response = await fetch('/api/about');
       if (response.ok) {
         const data = await response.json();
-        setAboutData(data); // API returns single object
+        setAboutData(data);
+      } else {
+        setApiError(true);
       }
     } catch (error) {
       console.error('Error fetching about data:', error);
+      setApiError(true);
     } finally {
       setLoading(false);
     }
   };
+
+  // Use live data when available, fallback otherwise
+  const data = aboutData ?? FALLBACK_ABOUT;
 
   const handleNavigate = (path: string) => {
     window.dispatchEvent(new Event('force-route-transition'));
@@ -99,17 +133,6 @@ const About: React.FC = () => {
     );
   }
 
-  if (!aboutData) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">About information not available</h2>
-          <p className="text-gray-600">Please try again later.</p>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div>
       {/* Hero Section - Fullscreen background video with overlay content */}
@@ -132,7 +155,7 @@ const About: React.FC = () => {
               About VisionAI
             </h1>
             <p className="text-lg md:text-2xl text-blue-100 leading-relaxed sub-wipe">
-              {aboutData.companyInfo.description}
+              {data.companyInfo.description}
             </p>
             <div className="mt-8 flex justify-center">
               <button
@@ -153,23 +176,15 @@ const About: React.FC = () => {
             <div>
               <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-6">Our Mission</h2>
               <p className="text-lg text-gray-600 dark:text-gray-300 leading-relaxed mb-6">
-                {aboutData.companyInfo.mission}
+                {data.companyInfo.mission}
               </p>
-              {/* <p className="text-lg text-gray-600 dark:text-gray-300 leading-relaxed">
-                Through our expertise in machine learning, data science, and business strategy, 
-                we help our clients navigate the complexities of AI adoption and achieve measurable results.
-              </p> */}
             </div>
-            
+
             <div>
               <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-6">Our Vision</h2>
               <p className="text-lg text-gray-600 dark:text-gray-300 leading-relaxed mb-6">
-                {aboutData.companyInfo.vision}
+                {data.companyInfo.vision}
               </p>
-              {/* <p className="text-lg text-gray-600 dark:text-gray-300 leading-relaxed">
-                We envision a future where AI is seamlessly integrated into every aspect of business 
-                operations, driving unprecedented levels of efficiency, innovation, and growth.
-              </p> */}
             </div>
           </div>
         </div>
@@ -186,7 +201,7 @@ const About: React.FC = () => {
               The principles that guide everything we do at VisionAI.
             </p>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {values.map((value, index) => (
               <div key={index} className="bg-white dark:bg-gray-900 rounded-xl p-8 shadow-lg text-center">
@@ -227,8 +242,8 @@ const About: React.FC = () => {
                 >
                   <div className="h-64 bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
                     {director.image ? (
-                      <img 
-                        src={director.image} 
+                      <img
+                        src={director.image}
                         alt={director.name}
                         className="h-full w-full object-cover"
                       />

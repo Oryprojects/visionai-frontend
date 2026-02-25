@@ -20,10 +20,17 @@ interface AboutData {
   contactInfo: ContactInfo;
 }
 
+// Default/fallback contact data - always visible even if API is unavailable
+const defaultContactInfo: ContactInfo = {
+  email: 'sales@visionai.jp',
+  phone: '+81-50-8894-4567',
+  address: '305-0861, Ibaraki, Tsukuba, Yatabe 1077-58, Japan',
+};
+
 const Contact: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
-  const [contactData, setContactData] = useState<ContactInfo | null>(null);
+  const [contactData, setContactData] = useState<ContactInfo>(defaultContactInfo);
   const { register, handleSubmit, formState: { errors }, reset } = useForm<ContactForm>();
 
   useEffect(() => {
@@ -35,10 +42,18 @@ const Contact: React.FC = () => {
       const response = await fetch('/api/about');
       if (response.ok) {
         const data: AboutData = await response.json();
-        setContactData(data.contactInfo);
+        if (data?.contactInfo) {
+          setContactData({
+            email: data.contactInfo.email || defaultContactInfo.email,
+            phone: data.contactInfo.phone || defaultContactInfo.phone,
+            address: data.contactInfo.address || defaultContactInfo.address,
+            mapUrl: data.contactInfo.mapUrl,
+          });
+        }
       }
     } catch (error) {
       console.error('Error fetching contact data:', error);
+      // Fallback data is already set as default state, no action needed
     }
   };
 
@@ -85,7 +100,7 @@ const Contact: React.FC = () => {
           <div className="max-w-3xl blog-hero-text slide-in-once slide-delay-200">
             <h1 className="text-4xl md:text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-emerald-300 via-teal-300 to-cyan-300 mb-6 heading-zoom">Get In Touch</h1>
             <p className="text-lg md:text-2xl text-emerald-100 leading-relaxed sub-wipe">
-              Ready to transform your business with AI? Let's start a conversation about your goals and 
+              Ready to transform your business with AI? Let's start a conversation about your goals and
               how we can help you achieve them.
             </p>
             <div className="mt-8">
@@ -105,11 +120,11 @@ const Contact: React.FC = () => {
                 Let's Connect
               </h2>
               <p className="text-lg text-gray-600 dark:text-gray-300 mb-8">
-                We're here to help you navigate your AI journey. Whether you have questions about our services, 
-                want to discuss a specific project, or just want to learn more about how AI can benefit your business, 
+                We're here to help you navigate your AI journey. Whether you have questions about our services,
+                want to discuss a specific project, or just want to learn more about how AI can benefit your business,
                 we'd love to hear from you.
               </p>
-              
+
               <div className="space-y-6">
                 <div className="flex items-center">
                   <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center mr-4">
@@ -118,9 +133,9 @@ const Contact: React.FC = () => {
                   <div>
                     <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Vision AI Location</h3>
                     <p className="text-gray-600 dark:text-gray-300">
-                      {contactData?.address || 'Loading...'}
+                      {contactData.address}
                     </p>
-                  </div> 
+                  </div>
                 </div>
                 <div className="flex items-center">
                   <div className="w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center mr-4">
@@ -128,7 +143,7 @@ const Contact: React.FC = () => {
                   </div>
                   <div>
                     <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Telephone</h3>
-                    <p className="text-gray-600 dark:text-gray-300">{contactData?.phone || 'Loading...'}</p>
+                    <p className="text-gray-600 dark:text-gray-300">{contactData.phone}</p>
                   </div>
                 </div>
                 <div className="flex items-center">
@@ -137,21 +152,21 @@ const Contact: React.FC = () => {
                   </div>
                   <div>
                     <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Email</h3>
-                    <p className="text-gray-600 dark:text-gray-300">{contactData?.email || 'Loading...'}</p>
+                    <p className="text-gray-600 dark:text-gray-300">{contactData.email}</p>
                   </div>
                 </div>
               </div>
-              
+
 
             </div>
-            
+
             {/* Contact Form */}
             <div>
               <div className="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-xl">
                 <h2 id="contact-form" className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
                   Send us a message
                 </h2>
-                
+
                 {submitSuccess ? (
                   <div className="text-center p-8">
                     <CheckCircle className="h-16 w-16 text-green-600 dark:text-green-400 mx-auto mb-4" />
@@ -176,13 +191,13 @@ const Contact: React.FC = () => {
                       />
                       {errors.name && <p className="mt-1 text-sm text-red-600">{errors.name.message}</p>}
                     </div>
-                    
+
                     <div>
                       <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                         Email Address *
                       </label>
                       <input
-                        {...register('email', { 
+                        {...register('email', {
                           required: 'Email is required',
                           pattern: {
                             value: /^\S+@\S+$/i,
@@ -195,7 +210,7 @@ const Contact: React.FC = () => {
                       />
                       {errors.email && <p className="mt-1 text-sm text-red-600">{errors.email.message}</p>}
                     </div>
-                    
+
                     <div>
                       <label htmlFor="subject" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                         Subject *
@@ -213,7 +228,7 @@ const Contact: React.FC = () => {
                       </select>
                       {errors.subject && <p className="mt-1 text-sm text-red-600">{errors.subject.message}</p>}
                     </div>
-                    
+
                     <div>
                       <label htmlFor="message" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                         Message *
@@ -226,7 +241,7 @@ const Contact: React.FC = () => {
                       />
                       {errors.message && <p className="mt-1 text-sm text-red-600">{errors.message.message}</p>}
                     </div>
-                    
+
                     <button
                       type="submit"
                       disabled={isSubmitting}
@@ -263,7 +278,7 @@ const Contact: React.FC = () => {
                   <MapPin className="h-5 w-5 mr-3 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-1" />
                   <div>
                     <div className="font-semibold">Vision AI Location</div>
-                    <div>{contactData?.address || 'Loading...'}</div>
+                    <div>{contactData.address}</div>
                   </div>
                 </div>
                 <div>
@@ -272,18 +287,18 @@ const Contact: React.FC = () => {
                 </div>
               </div>
             </div>
-                <div className="w-full h-[380px] rounded-xl overflow-hidden shadow-lg border border-gray-200 dark:border-gray-700">
-                  <iframe
-                    title="Vision AI Japan Location"
-                    width="100%"
-                    height="100%"
-                    style={{ border: 0 }}
-                    loading="lazy"
-                    allowFullScreen
-                    referrerPolicy="no-referrer-when-downgrade"
-                    src={`https://www.google.com/maps?q=${encodeURIComponent(contactData?.address || '305-0861, Ibaraki, Tsukuba, Yatabe 1077-58, Japan')}&output=embed`}
-                  />
-                </div>
+            <div className="w-full h-[380px] rounded-xl overflow-hidden shadow-lg border border-gray-200 dark:border-gray-700">
+              <iframe
+                title="Vision AI Japan Location"
+                width="100%"
+                height="100%"
+                style={{ border: 0 }}
+                loading="lazy"
+                allowFullScreen
+                referrerPolicy="no-referrer-when-downgrade"
+                src={`https://www.google.com/maps?q=${encodeURIComponent(contactData.address)}&output=embed`}
+              />
+            </div>
           </div>
         </div>
       </section>
