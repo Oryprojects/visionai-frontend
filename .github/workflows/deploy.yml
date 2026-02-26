@@ -15,8 +15,8 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t frontend:latest .
+          docker build -t oryprojectsdocker/visionai-frontend:latest .
 
       - name: Restart Frontend Deployment
         run: |
-          kubectl rollout restart deployment frontend-deployment
+          kubectl rollout restart deployment visionai-frontend
