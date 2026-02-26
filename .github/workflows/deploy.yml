@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Code
+      - name: Checkout the Code
         uses: actions/checkout@v3
 
       - name: Login to Docker Hub
@@ -34,4 +34,4 @@ jobs:
       - name: Restart Frontend Deployment
         run: |
           export KUBECONFIG=kubeconfig.yaml
-          kubectl rollout restart deployment visionai-frontend
+          kubectl rollout restart deployment visionai-frontend 
