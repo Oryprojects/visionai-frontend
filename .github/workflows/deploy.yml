@@ -10,12 +10,23 @@ jobs:
     runs-on: self-hosted
 
     steps:
-      - name: Checkout code
+      - name: Checkout latest code
         uses: actions/checkout@v3
+        with:
+          clean: true
+          fetch-depth: 0
+
+      - name: Login to DockerHub
+        run: |
+          echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
 
       - name: Build Docker image
         run: |
-          docker build -t oryprojectsdocker/visionai-frontend:latest .
+          docker build --no-cache -t oryprojectsdocker/visionai-frontend:latest .
+
+      - name: Push Docker image
+        run: |
+          docker push oryprojectsdocker/visionai-frontend:latest
 
       - name: Restart Frontend Deployment
         run: |
