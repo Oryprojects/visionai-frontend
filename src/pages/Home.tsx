@@ -219,7 +219,7 @@ const Home: React.FC = () => {
           <div className="w-full max-w-4xl px-4 sm:px-6 slide-in-once slide-delay-200">
             <div className="mb-6 sm:mb-8">
               <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight leading-tight text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-blue-400 to-purple-400 heading-zoom">
-                WELCOME TO VISION AI
+                VISION AI
               </h1>
             </div>
             <div className="mb-8 sm:mb-10 max-w-2xl mx-auto">
