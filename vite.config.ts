@@ -8,7 +8,7 @@ const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
 export default defineConfig({
-  base: '/visionai/', // 👈 IMPORTANT for ingress path
+  base: '/', // 👈 IMPORTANT for ingress path
 
   plugins: [react()],
 
